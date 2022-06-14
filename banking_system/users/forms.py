@@ -10,24 +10,25 @@ from banking_system.models import User
 class RegistrationForm(FlaskForm):
 	user_name = StringField('Username: ', validators=[DataRequired(), Length(min=2, max=20)])
 	user_email = StringField('Email: ', validators=[DataRequired(), Email()])
-	user_phone_number = IntegerField('Phone number: ', validators=[DataRequired(), Length(10)])
+	user_phone_number = IntegerField('Phone number: ', validators=[DataRequired()])
 	user_first_name = StringField('First name: ', validators=[DataRequired()])
 	user_last_name =  StringField('Last name: ', validators=[DataRequired()])
 	user_address =  StringField('Address: ', validators=[DataRequired()])
-	user_age = IntegerField('Age: ', validators=[DataRequired(), Length(10)])
+	user_age = IntegerField('Age: ', validators=[DataRequired()])
 	date_of_birth = DateField('Date of birth', format='%Y-%m-%d' )
 	# role = 'user'
 	user_password = PasswordField('Password', validators= [DataRequired()])
 	confirm_password = PasswordField('confirm password', validators=[DataRequired(), EqualTo('user_password')])
 	submit = SubmitField('Sign Up')
+	
 
-	def validate_username(self,username):
-		user = User.query.filter_by(username=username.data).first()
+	def validate_username(self,user_name):
+		user = User.query.filter_by(user_name=user_name.data).first()
 		if user:
 			raise ValidationError('That username is taken please Choose differnt one')
 
-	def validate_email(self,email):
-		email = User.query.filter_by(email=email.data).first()
+	def validate_email(self,user_email):
+		email = User.query.filter_by(user_email=user_email.data).first()
 		if email:
 			raise ValidationError('That email is taken please Choose differnt one')
 
@@ -36,3 +37,36 @@ class LoginForm(FlaskForm):
 	user_password = PasswordField('Password', validators=[DataRequired()])
 	remember = BooleanField('Remember Me')
 	submit = SubmitField('Login IN')
+
+class UpdateAccountForm(FlaskForm):
+	user_name = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+	user_email = StringField('Email', validators=[DataRequired(), Email()])
+	# picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg','jpeg'])])
+	submit = SubmitField('Update',)
+
+	def validate_username(self,user_name):
+		if user_name.data != current_user.user_name:
+			user = User.query.filter_by(user_name=user_name.data).first()
+			if user:
+				raise ValidationError('That username is taken please Choose differnt one')
+
+	def validate_email(self,user_email):
+		if user_email.data != current_user.user_email:
+			user_email = User.query.filter_by(user_email=user_email.data).first()
+			if user_email:
+				raise ValidationError('That email is taken please Choose differnt one')
+
+class RequestResetForm(FlaskForm):
+	user_email = StringField('Email',validators=[DataRequired(), Email()])
+	submit = SubmitField('Request Password Reset')
+
+	def validate_email(self,user_email):
+		user = User.query.filter_by(user_email= user_email.data).first()
+		if user is None:
+			raise ValidationError('There is no account with that email. YOu must register first! ')
+
+
+class ResetPasswordForm(FlaskForm):
+	user_password = PasswordField('Password', validators= [DataRequired()])
+	confirm_password = PasswordField('confirm password', validators=[DataRequired(), EqualTo('password')])
+	submit = SubmitField('Reset Password',)

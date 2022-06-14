@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<main role="main" class="container">
+
+    <div class="col-md-12" style="background-color:rgb(39, 45, 83);color:white;padding:20px">
+        ADMIN'S Dashboard
+    </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br><hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4" style="text-align:center">
+                
+                <h5>This is all bank user's</h5>
+                {% for user in users  %}
+                    {% if user.user_email=='steffy.inexture@gmail.com' %}
+                        
+                    {% else %}
+                    <h6>{{ user.user_name }}  </h6>     
+                    {% endif %}               
+                {% endfor %}
+                      
+                <hr>
+                <button>Bank users</button>
+            </div>
+
+            <div class="col-md-4" style="text-align:center">
+                
+                <h5>This is all bank user's</h5>
+                {% for user in users  %}
+                    {% if user.user_email=='steffy.inexture@gmail.com' %}
+                        
+                    {% else %}
+                    <h6>{{ user.user_name }}  </h6>     
+                    {% endif %}               
+                {% endfor %}
+                      
+                <hr>
+            </div>
+           
+            
+
+
+
+</main>
+{% endblock content %}

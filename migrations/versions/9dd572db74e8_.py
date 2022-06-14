@@ -29,12 +29,12 @@ def upgrade():
     )
     op.create_table('user',
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('user_name', sa.String(length=20), nullable=False),
-    sa.Column('user_password', sa.String(length=20), nullable=False),
+    sa.Column('user_name', sa.String(length=320), nullable=False),
+    sa.Column('user_password', sa.String(length=320), nullable=False),
     sa.Column('user_email', sa.String(length=120), nullable=False),
     sa.Column('user_phone_number', sa.Integer(), nullable=True),
-    sa.Column('first_name', sa.String(length=20), nullable=False),
-    sa.Column('last_name', sa.String(length=20), nullable=False),
+    sa.Column('first_name', sa.String(length=320), nullable=False),
+    sa.Column('last_name', sa.String(length=320), nullable=False),
     sa.Column('user_address', sa.String(length=120), nullable=False),
     sa.Column('user_age', sa.Integer(), nullable=False),
     sa.Column('date_of_birth', sa.DateTime(), nullable=False),
@@ -91,7 +91,7 @@ def upgrade():
     op.create_table('user_type',
     sa.Column('user_type_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('user_role', sa.String(length=20), nullable=False),
+    sa.Column('user_role', sa.String(length=320), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ),
     sa.PrimaryKeyConstraint('user_type_id')
     )
