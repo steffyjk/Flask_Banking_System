@@ -3,26 +3,58 @@ from flask import current_app
 from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from pkg_resources import find_distributions
-from banking_system import db
+from banking_system import db, login_manager
 from flask_login import UserMixin
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # print(user_id,"####################")
+    p = User.query.get(int(user_id))
+    # print("this is p: ",p)
+    return p
 
 #modified [ 09-06-2022 ]
 class User(db.Model, UserMixin):
     user_id = db.Column(db.Integer,primary_key=True)
-    user_name = db.Column(db.String(20),unique=True,nullable=False)
-    user_password = db.Column(db.String(20), nullable=False)
+    user_name = db.Column(db.String(320),unique=True,nullable=False)
+    user_password = db.Column(db.String(320), nullable=False)
     user_email = db.Column(db.String(120),unique=True,nullable=False)
-    user_phone_number= db.Column(db.Integer)
-    first_name = db.Column(db.String(20),nullable=False)
-    last_name = db.Column(db.String(20),nullable=False)
+    u_p= db.Column(db.String(320))
+    user_phone_number=u_p
+    user_first_name = db.Column(db.String(320),nullable=False)
+    user_last_name = db.Column(db.String(320),nullable=False)
     user_address = db.Column(db.String(120),nullable=False)
     user_age = db.Column(db.Integer,nullable=False)
     date_of_birth = db.Column(db.DateTime,nullable=False)
 
+    def get_id(self):
+        return self.user_id
+
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.user_id}).decode('utf-8')
+
+
+    @staticmethod
+    def verify_reset_token(token):
+        
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+        
+
+    def __repr__(self):
+        return f"User('{self.user_name}','{self.user_email}')"
+
+
 class User_type(db.Model):
     user_type_id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('user.user_id'),nullable=False)
-    user_role = db.Column(db.String(20),nullable=False,default='user')
+    user_role = db.Column(db.String(320),nullable=False,default='user')
 
 class Account(db.Model):
     account_number = db.Column(db.Integer,primary_key=True)
@@ -97,10 +129,10 @@ class Fixed_deposite(db.Model):
     account_number = db.Column(db.Integer,db.ForeignKey('account.account_number'),nullable=False)
 
 class Bank_details(db.Model):
-    bank_name = db.Column(db.String(20),unique=True,nullable=False)
-    bank_id = db.Column(db.Integer,primary_key=True)
-    bank_email = db.Column(db.String(120),unique=True,nullable=False)
-    bank_contact = db.Column(db.Integer)
+    bank_name = db.Column(db.String(20),unique=True,nullable=False,default='SJK BANK')
+    bank_id = db.Column(db.Integer,primary_key=True,default='1007')
+    bank_email = db.Column(db.String(120),unique=True,nullable=False,default='desaiparth974@gmail.com')
+    bank_contact = db.Column(db.Integer,default='10058')
 
 class Branch(db.Model):
     branch_id = db.Column(db.Integer,primary_key=True)
