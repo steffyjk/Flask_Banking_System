@@ -48,12 +48,12 @@ class User(db.Model, UserMixin):
         
 
     def __repr__(self):
-        return f"User('{self.user_name}','{self.user_email}')"
+        return f"User('{self.user_name}','{self.user_email}','{self.user_id}')"
 
 
 class User_type(db.Model):
     user_type_id = db.Column(db.Integer,primary_key=True)
-    user_id = db.Column(db.Integer,db.ForeignKey('user.user_id'),nullable=False)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.user_id'))
     user_role = db.Column(db.String(320),nullable=False,default='user')
 
 class Account(db.Model):

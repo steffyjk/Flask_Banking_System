@@ -9,39 +9,114 @@
     <br>
     <br>
     <br>
-    <br><hr>
+    <br>
+    <hr>
     <div class="container">
         <div class="row">
             <div class="col-md-4" style="text-align:center">
-                
-                <h5>This is all bank user's</h5>
-                {% for user in users  %}
-                    {% if user.user_email=='steffy.inexture@gmail.com' %}
-                        
-                    {% else %}
-                    <h6>{{ user.user_name }}  </h6>     
-                    {% endif %}               
+
+                <h5 style="text-align: left;">bank user's Data</h5>
+
+                <p style="background-color:grey; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;name</p>
+                {% for user in users %}
+                {% if user.user_email=='steffy.inexture@gmail.com' %}
+
+                {% else %}
+                <h6 style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{user.user_id}}&nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp;{{ user.user_name }} </h6>
+                {% endif %}
                 {% endfor %}
-                      
+
                 <hr>
-                <button>Bank users</button>
+                <button>Add new Bank users</button>
             </div>
 
             <div class="col-md-4" style="text-align:center">
-                
-                <h5>This is all bank user's</h5>
-                {% for user in users  %}
-                    {% if user.user_email=='steffy.inexture@gmail.com' %}
-                        
-                    {% else %}
-                    <h6>{{ user.user_name }}  </h6>     
-                    {% endif %}               
+
+                <h5 style="text-align: left;">bank branch's Data</h5>
+                <p style="text-align: left;background-color:grey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;branch</p>
+                {% for branch in branchs %}
+                <h6 style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{branch.branch_id}}&nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;{{ branch.branch_name }} </h6>
+
                 {% endfor %}
-                      
+
                 <hr>
+                <button>Add new Bank branch</button>
             </div>
-           
-            
+
+            <div class="col-md-4" style="text-align:center">
+
+                <h5 style="text-align: left;">bank atms's Data</h5>
+                <p style="text-align: left;background-color:grey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;atms</p>
+                {% for atm in atms %}
+                <h6 style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ atm.atm_id }} &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; {{ atm.atm_address }} </h6>
+                {% endfor %}
+
+                <hr>
+                <button>Add new Bank atm</button>
+            </div>
+        </div>
+
+        <hr style="background-color: black;">
+        <hr style="background-color: black;">
+
+        <div class="row">
+            <div class="col-md-4" style="text-align:center">
+
+                <h5 style="text-align: left;">This is all bank user's</h5>
+
+                <p style="background-color:grey; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;name</p>
+                {% for user in users %}
+                {% if user.user_email=='steffy.inexture@gmail.com' %}
+
+                {% else %}
+                <h6 style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{user.user_id}}&nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp;{{ user.user_name }} </h6>
+                {% endif %}
+                {% endfor %}
+
+                <hr>
+                <button>Add new Bank users</button>
+            </div>
+
+            <div class="col-md-4" style="text-align:center">
+
+                <h5 style="text-align: left;">This is all bank branch's</h5>
+                <p style="text-align: left;background-color:grey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;branch</p>
+                {% for branch in branchs %}
+                <h6 style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{branch.branch_id}}&nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;{{ branch.branch_name }} </h6>
+
+                {% endfor %}
+
+                <hr>
+                <button>Add new Bank branch</button>
+            </div>
+
+            <div class="col-md-4" style="text-align:center">
+
+                <h5 style="text-align: left;">This is all bank atms's</h5>
+                <p style="text-align: left;background-color:grey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;atms</p>
+                {% for atm in atms %}
+                <h6 style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ atm.atm_id }} &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; {{ atm.atm_address }} </h6>
+                {% endfor %}
+
+                <hr>
+                <button>Add new Bank atm</button>
+            </div>
+        </div>
+
+
+
 
 
 

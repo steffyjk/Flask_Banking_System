@@ -2,7 +2,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required, login_manager
 from banking_system import db, bcrypt
-from banking_system.models import User, Branch
+from banking_system.models import User, Branch, Atm
 from banking_system.admin.forms import AddBranch, LoginForm
 from flask import Blueprint
 
@@ -20,8 +20,9 @@ def admin_login():
             flash('admin Login successfully..', 'success')
             # posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
             users = User.query.order_by(User.user_id.desc())
-            # return render_template('home.html', posts = posts)
-            return render_template('admin_dashboard.html', users = users)
+            branchs = Branch.query.order_by(Branch.branch_id.desc())
+            atms = Atm.query.order_by(Atm.atm_id.desc())
+            return render_template('admin_dashboard.html', users = users, branchs =branchs,atms=atms)
         else:
             flash('Login unsuccessfull..please check email and password', 'danger')
     return render_template('admin_login.html', title='login', form=form)
@@ -29,7 +30,9 @@ def admin_login():
 @admin.route("/admin_dashboard", methods = ['GET', 'POST'])
 def admin_dashboard():
     users = User.query.all()
-    return render_template('admin_dashboard.html', title='admin_dashboard',users=users)
+    branchs = Branch.query.order_by(Branch.branch_id.desc())
+    atms = Atm.query.order_by(Atm.atm_id.desc())
+    return render_template('admin_dashboard.html', title='admin_dashboard',users=users,branchs=branchs,atms=atms)
 
 @admin.route("/add_branch", methods = ['GET', 'POST'])
 def add_branch():
