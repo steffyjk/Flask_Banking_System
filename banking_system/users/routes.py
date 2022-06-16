@@ -132,9 +132,29 @@ def request_account():
         account = Account(account_number=account_number,user_id=user.user_id,branch_id=branch_id)
         db.session.add(account)
         db.session.commit()
-        flash(f'your account has been created')
+        flash(f'your account has been created','success')
 
         return redirect(url_for('users.dashboard'))
     else:
         flash(f"you need to login first")
         return redirect('main.home')
+
+# @users.route("/request-account", methods = ['GET', 'POST'])
+# def request_account():
+#     if current_user.is_authenticated:
+#         # print('this is current user:',current_user.user_name)
+#         user = User.query.filter_by(user_id = current_user.user_id).first()
+#         # print('this is user: ',user)
+#         branch=Branch.query.first()
+#         branch_id = branch.branch_id
+#         account_number = random.randint(1,1000)
+#         account = Account(account_number=account_number,user_id=user.user_id,branch_id=branch_id)
+#         db.session.add(account)
+#         db.session.commit()
+#         flash(f'your account has been created','success')
+
+#         return redirect(url_for('users.dashboard'))
+#     else:
+#         flash(f"you need to login first")
+#         return redirect('main.home')
+

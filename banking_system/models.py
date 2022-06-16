@@ -1,4 +1,5 @@
 from email.policy import default
+from enum import unique
 from flask import current_app
 from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -64,7 +65,7 @@ class Account(db.Model):
     saving_balance = db.Column(db.Float,nullable=False,default=0.0)
     #added    
     account_creation_date = db.Column(db.DateTime,nullable=False, default= datetime.utcnow)
-    user_id = db.Column(db.Integer,db.ForeignKey('user.user_id'),nullable=False)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.user_id'),nullable=False,unique=True)
     branch_id = db.Column(db.Integer,db.ForeignKey('branch.branch_id'),nullable=False)
 
 class Account_type(db.Model):

@@ -73,7 +73,6 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
 	user_name = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
 	
-	# picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg','jpeg'])])
 	submit = SubmitField('Update',)
 
 	def validate_user_name(self,user_name):
@@ -97,3 +96,5 @@ class ResetPasswordForm(FlaskForm):
 	user_password = PasswordField('Password', validators= [DataRequired()])
 	confirm_password = PasswordField('confirm password', validators=[DataRequired(), EqualTo('password')])
 	submit = SubmitField('Reset Password',)
+
+
