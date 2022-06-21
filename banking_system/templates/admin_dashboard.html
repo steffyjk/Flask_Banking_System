@@ -3,45 +3,109 @@
 <main role="main" class="container">
 
     <div class="col-md-12" style="background-color:rgb(39, 45, 83);color:white;padding:20px">
-        ADMIN'S Dashboard
+        ADMINER'S Dashboard
     </div>
     </div>
     <br>
     <br>
     <br>
-    <br><hr>
+    <br>
+    <hr>
     <div class="container">
         <div class="row">
-            <div class="col-md-4" style="text-align:center">
-                
-                <h5>This is all bank user's</h5>
-                {% for user in users  %}
-                    {% if user.user_email=='steffy.inexture@gmail.com' %}
-                        
-                    {% else %}
-                    <h6>{{ user.user_name }}  </h6>     
-                    {% endif %}               
-                {% endfor %}
-                      
+            <br>
+            <br>
+
+            <div class="col-md-4" style="text-align:center;border:solid;padding:15px;">
+
+                <h5 style="text-align: center;background:black;color:white;">bank user's Data</h5>
+                <table style="text-align:left">
+                    <tr >
+                    <th style="text-align:left"><pre>id     </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>User name   </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>User account status   </pre></th>
+                    </tr>
+
+                    {% for user in users %}
+                    {% if user.user_email!='steffy.inexture@gmail.com' %}
+                    <tr>
+                        <td><pre>{{user.user_id}}   </pre></td>&nbsp;
+                        <td><pre>{{user.user_name}}    </pre></td>&nbsp;
+                        {% for account in accounts%}
+
+                        {% if account.user_id==user.user_id %}
+
+                        <td><pre><button>{{account.account_status}}</button>   </pre></td>&nbsp;
+                        {% endif %}
+                        {% endfor%}
+                        <td><pre>  </pre></td>&nbsp;
+                    </tr>
+                    {%endif%}
+                    {% endfor %}
+
+                </table>
                 <hr>
-                <button>Bank users</button>
+                <a href="{{url_for('admin.add_branch')}}"><button>Add new User</button></a>
+
             </div>
 
-            <div class="col-md-4" style="text-align:center">
-                
-                <h5>This is all bank user's</h5>
-                {% for user in users  %}
-                    {% if user.user_email=='steffy.inexture@gmail.com' %}
-                        
-                    {% else %}
-                    <h6>{{ user.user_name }}  </h6>     
-                    {% endif %}               
-                {% endfor %}
-                      
+            <div class="col-md-4" style="text-align:center;border:solid;padding:15px;">
+
+                <h5 style="text-align: center;;background:black;color:white;">bank branch's Data</h5>
+                <table style="text-align:left">
+                    <tr >
+                    <th style="text-align:left"><pre>id     </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>Branch name   </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>Branch address   </pre></th>
+                    </tr>
+
+                    {% for branch in branchs %}
+                    <tr>
+                        <td><pre>{{branch.branch_id}}   </pre></td>&nbsp;
+                        <td><pre>{{branch.branch_name}}    </pre></td>&nbsp;
+                        <td><pre>{{branch.branch_address}}   </pre></td>&nbsp;
+                    </tr>
+                    {% endfor %}
+
+                </table>
                 <hr>
+                <a href="{{url_for('admin.add_branch')}}"><button>Add new Bank branch</button></a>
+
             </div>
-           
-            
+
+            <div class="col-md-4" style="text-align:center;border:solid;padding:15px;">
+
+                <h5 style="text-align: center;;background:black;color:white;">bank atm's Data</h5>
+                <table style="text-align:left">
+                    <tr >
+                    <th style="text-align:left"><pre>id     </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>atm address   </pre></th>&nbsp;
+                    </tr>
+
+                    {% for atm in atms %}
+                    <tr>
+                        <td><pre>{{atm.atm_id}}   </pre></td>&nbsp;
+                        <td><pre>{{atm.atm_address}}   </pre></td>&nbsp;
+                    </tr>
+                    {% endfor %}
+
+                </table>
+                <hr>
+                <a href="{{url_for('admin.add_atm')}}" style="text-align:left"><button>Add new Bank atm</button></a>
+
+            </div>
+
+
+
+        </div>
+
+        <hr style="background-color: black;">
+        <hr style="background-color: black;">
+
+
+
+
+
 
 
 
