@@ -53,6 +53,7 @@ class LoginForm(FlaskForm):
 	remember = BooleanField('Remember Me')
 	submit = SubmitField('Login IN')
 
+
 class UpdateAccountForm(FlaskForm):
 	user_name = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
 	user_email = StringField('Email', validators=[DataRequired(), Email()])

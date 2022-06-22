@@ -35,7 +35,12 @@ body {
   .article-title {
     color: #444444;
   }
-  
+
+  a{
+  color:white}
+
+  a:hover{
+  color:white}
   a.article-title:hover {
     color: #293036;
     text-decoration: none;
@@ -78,3 +83,23 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
+
+  button{
+
+    top:50%;
+    background-color:#0a0a23;
+    color: #fff;
+    border:none;
+    border-radius:10px;
+    box-shadow: 0px 0px 2px 2px rgb(0,0,0);}
+
+ button:hover {
+      background-color:#002ead;
+      transition: 0.7s;
+  }
+
+ button:focus {
+    outline-color: transparent;
+    outline-style:solid;
+    box-shadow: 0 0 0 4px #5a01a7;
+}

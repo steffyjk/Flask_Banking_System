@@ -3,7 +3,7 @@
 <main role="main" class="container">
 
     <div class="col-md-12" style="background-color:rgb(39, 45, 83);color:white;padding:20px">
-        ADMINER'S Dashboard
+        ADMIN'S Dashboard
     </div>
     </div>
     <br>
@@ -12,6 +12,32 @@
     <br>
     <hr>
     <div class="container">
+        <br>
+        <h5>AS A BANK ADMIN YOU CAN MODIFY THIS MANY THINGS</h5>
+        <div class="row">
+            <div class="col-md-12">
+
+            <pre>
+                <table>
+                    <th><button><a href="{{url_for('admin.admin_user_data')}}">USERS</a></button><br></th>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.admin_branch_data')}}">BRANCHS</a></button><br></th>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.admin_atm_data')}}">ATMS</a></button></pre></th>
+                </table>
+                <h5>REQUESTS</h5>
+                <table>
+                    <th><button><a href="{{url_for('admin.admin_user_data')}}">Crad Requests</a></button><br></th>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.admin_user_loan_data')}}">Loan Requests</a></button><br></th>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.admin_atm_data')}}">Insurance Requests</a></button></pre></th>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.admin_atm_data')}}">Fixed deposits Requests</a></button></pre></th>
+
+                </table>
+                </div>
+        </div>
         <div class="row">
             <br>
             <br>
@@ -22,20 +48,23 @@
                 <table style="text-align:left">
                     <tr >
                     <th style="text-align:left"><pre>id     </pre></th>&nbsp;
-                    <th style="text-align:left"><pre>User name   </pre></th>&nbsp;
-                    <th style="text-align:left"><pre>User account status   </pre></th>
+                    <th style="text-align:left"><pre>User name  </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>Account status   </pre></th>
                     </tr>
 
                     {% for user in users %}
                     {% if user.user_email!='steffy.inexture@gmail.com' %}
                     <tr>
                         <td><pre>{{user.user_id}}   </pre></td>&nbsp;
-                        <td><pre>{{user.user_name}}    </pre></td>&nbsp;
+                        <td><pre>{{user.user_name}}  </pre></td>&nbsp;
                         {% for account in accounts%}
 
                         {% if account.user_id==user.user_id %}
 
-                        <td><pre><button>{{account.account_status}}</button>   </pre></td>&nbsp;
+                        <td><pre><button><a href="{{url_for('admin.account_status',
+                                                    user_id=user.user_id,
+                                                    user_name=user.user_name,
+                                                    account_number=account.account_number)}}">{{account.account_status}}</a></button>   </pre></td>&nbsp;
                         {% endif %}
                         {% endfor%}
                         <td><pre>  </pre></td>&nbsp;
@@ -45,7 +74,7 @@
 
                 </table>
                 <hr>
-                <a href="{{url_for('admin.add_branch')}}"><button>Add new User</button></a>
+                <a href="{{url_for('users.register')}}"><button>Add new User</button></a>
 
             </div>
 

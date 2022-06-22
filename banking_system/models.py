@@ -113,7 +113,7 @@ class LoanType(db.Model):
 class Insurance(db.Model):
     insurance_id = db.Column(db.Integer, primary_key=True)
     insurance_amount = db.Column(db.Float, nullable=False, default=0.0)
-    insurance_status = db.Column(db.String(100), nullable=False, default='inactive')
+    insurance_status = db.Column(db.String(100), nullable=False, default='Inactive')
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
 
 
@@ -126,7 +126,7 @@ class InsuranceType(db.Model):
 class FixedDeposit(db.Model):
     fd_id = db.Column(db.Integer, primary_key=True)
     fd_amount = db.Column(db.Float, nullable=False, default=0.0)
-    fd_status = db.Column(db.String(100), nullable=False, default='inactive')
+    fd_status = db.Column(db.String(100), nullable=False, default='Inactive')
     rate_interest = db.Column(db.Float, nullable=False, default=0.0)
     added_amount = db.Column(db.Float, nullable=False, default=0.0)
     account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number'), nullable=False)

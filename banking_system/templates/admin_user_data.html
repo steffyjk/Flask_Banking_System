@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{url_for('admin.admin_dashboard')}}"><button>Go back</button></a>
+<br>
+<hr>
+<div class="container">
+
+    </button>
+    <div class="row">
+          <br>
+            <br>
+            <div class="col-md-4" style="text-align:center;border:solid;padding:15px;">
+                <h5 style="text-align: center;background:black;color:white;">bank user's Data</h5>
+                <table style="text-align:left">
+                    <tr >
+                    <th style="text-align:left"><pre>id     </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>User name  </pre></th>&nbsp;
+                    <th style="text-align:left"><pre>Account status   </pre></th>
+                    </tr>
+                    {% for user in users %}
+                    {% if user.user_email!='steffy.inexture@gmail.com' %}
+                    <tr>
+                        <td><pre>{{user.user_id}}   </pre></td>&nbsp;
+                        <td><pre>{{user.user_name}}  </pre></td>&nbsp;
+                        {% for account in accounts%}
+                        {% if account.user_id==user.user_id %}
+                        <td><pre><button><a href="{{url_for('admin.account_status',
+                                                    user_id=user.user_id,
+                                                    user_name=user.user_name,
+                                                    account_number=account.account_number)}}">{{account.account_status}}</a></button>   </pre></td>&nbsp;
+                        {% endif %}
+                        {% endfor%}
+                        <td><pre>  </pre></td>&nbsp;
+                    </tr>
+                    {%endif%}
+                    {% endfor %}
+                </table>
+                <hr>
+                <a href="{{url_for('users.register')}}"><button>Add new User</button></a>
+            </div>
+    </div>
+</div>
+{% endblock content %}
