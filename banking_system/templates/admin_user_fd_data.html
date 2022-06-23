@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{url_for('admin.admin_dashboard')}}"><button>Go back</button></a>
+<br>
+<hr>
+<div class="row">
+          <br>
+            <br>
+            <div class="col-md-12" style="text-align:center;border:solid;padding:15px;">
+                <h5 style="text-align: center;background:black;color:white;">user's Loan Data</h5>
+                <table style="text-align:left">
+                    <tr>
+
+                        <th style="text-align:left"><pre>User id     </pre></th>&nbsp;
+                        <th style="text-align:left"><pre>User name  </pre></th>&nbsp;
+                        <th style="text-align:left"><pre>Account number   </pre></th>
+                        <th style="text-align:left"><pre>FD id   </pre></th>
+                        <th style="text-align:left"><pre>FD amount   </pre></th>
+                        <th style="text-align:left"><pre>Rate interest   </pre></th>
+                        <th style="text-align:left"><pre>ADDED amount   </pre></th>
+                        <th style="text-align:left"><pre>FD status   </pre></th>
+                        <th style="text-align:left"><pre>FD approval   </pre></th>
+
+                    </tr>
+                    {% for fd in fds %}
+
+
+                    {% endfor %}
+
+                </table>
+                <hr>
+                <a href="{{url_for('users.register')}}"><button>Add other loan for users</button></a>
+            </div>
+    </div>
+{% endblock content %}

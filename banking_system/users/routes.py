@@ -61,7 +61,7 @@ def account_creation(user_id):
     branch = Branch.query.first()
     branch_id = branch.branch_id
     account_number = random.randint(1, 1000)
-    account = Account(account_number=account_number, user_id=user.user_id, branch_id=branch_id)
+    account = Account(account_number=account_number, user_id=user.user_id, branch_id=branch_id, account_balance=5000)
     db.session.add(account)
     db.session.commit()
 
@@ -334,12 +334,15 @@ def add_money():
             # sender = Account.query.filter_by(account_number=reciver_account_number).first()
             transaction_amount = form.credit_amount.data
             print("##################", reciever.account_balance)
-            reciever.account_balance += transaction_amount
-            account.account_balance -= transaction_amount
+
             receiver_id = reciever.user_id
             sender_id = current_user.user_id
-            if transaction_amount < account.account_balance:
+            print(transaction_amount)
+            print(account.account_balance)
+            if transaction_amount <= account.account_balance:
                 if receiver_id != account.user_id:
+                    reciever.account_balance += transaction_amount
+                    account.account_balance -= transaction_amount
                     transaction = Transaction(
                         transaction_amount=transaction_amount,
                         receiver_id=receiver_id,
@@ -361,7 +364,7 @@ def add_money():
                     def_transaction_type(transaction_type, transaction_id)
                     return redirect(url_for('users.dashboard'))
                 else:
-                    flash(f'you can not transfer to yourself it doesnot make any sense', 'danger')
+                    flash(f'you can not transfer to yourself it doesn\'t make any sense', 'danger')
                     return redirect(url_for('users.add_money'))
             else:
                 flash(f'unsufficient balance you have only: {account.account_balance}', 'danger')
