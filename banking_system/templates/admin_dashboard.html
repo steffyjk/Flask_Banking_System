@@ -5,7 +5,7 @@
     <div class="col-md-12" style="background-color:rgb(39, 45, 83);color:white;padding:20px">
         ADMIN'S Dashboard
     </div>
-    </div>
+
     <br>
     <br>
     <br>
@@ -21,9 +21,14 @@
                 <table>
                     <th><button><a href="{{url_for('admin.admin_user_data')}}">USERS</a></button><br></th>
                     <th>&nbsp;&nbsp;&nbsp;</th>
-                    <th><button><a href="{{url_for('admin.admin_branch_data')}}">BRANCHS</a></button><br></th>
+                    <th><button><a href="{{url_for('admin.admin_branch_data')}}">BRANCHES</a></button><br></th>
                     <th>&nbsp;&nbsp;&nbsp;</th>
                     <th><button><a href="{{url_for('admin.admin_atm_data')}}">ATMS</a></button></pre></th>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.show_bank_member')}}">Show bank member</a></button></pre></th>
+
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.bank_about_member')}}">Add bank member</a></button></pre></th>
                 </table>
                 <h5>REQUESTS</h5>
                 <table>
@@ -33,7 +38,7 @@
                     <th>&nbsp;&nbsp;&nbsp;</th>
                     <th><button><a href="{{url_for('admin.admin_user_insurance_data')}}">Insurance Requests</a></button></pre></th>
                     <th>&nbsp;&nbsp;&nbsp;</th>
-                    <th><button><a href="{{url_for('admin.admin_atm_data')}}">Fixed deposits Requests</a></button></pre></th>
+                    <th><button><a href="{{url_for('admin.admin_user_fd_data')}}">Fixed deposits Requests</a></button></pre></th>
 
                 </table>
                 </div>

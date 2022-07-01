@@ -28,3 +28,5 @@ SQLAlchemy==1.4.37
 Werkzeug==2.1.2
 WTForms==3.0.1
 zipp==3.8.0
+
+Pillow~=9.1.1

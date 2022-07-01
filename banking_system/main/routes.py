@@ -2,6 +2,8 @@ from flask import render_template, request, Blueprint
 # from flaskblog.models import Post
 from flask import Blueprint
 
+from banking_system.models import BankMember
+
 main = Blueprint('main', __name__)
 
 
@@ -17,4 +19,5 @@ def home():
 
 @main.route("/about")
 def about():
-    return render_template('about.html', title='Abouttitle')
+    bank_member = BankMember.query.all()
+    return render_template('about.html', title='about-bank',bank_member=bank_member)

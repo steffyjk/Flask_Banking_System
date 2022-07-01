@@ -4,6 +4,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from sqlalchemy.orm import relationship
 from banking_system import db, login_manager
 from flask_login import UserMixin
+from sqlalchemy.schema import Sequence
 
 
 @login_manager.user_loader
@@ -26,7 +27,7 @@ class User(db.Model, UserMixin):
     user_age = db.Column(db.Integer, nullable=False)
     date_of_birth = db.Column(db.DateTime, nullable=False)
 
-    user_type = relationship("UserType", cascade="all, delete")
+    user_type = relationship("UserType", cascade="all, delete", backref='user')
     account = relationship("Account", cascade="all, delete")
     transaction = relationship("Transaction", cascade="all, delete")
     loan = relationship("Loan", cascade="all, delete")
@@ -75,17 +76,19 @@ class Account(db.Model):
 
 class AccountType(db.Model):
     account_type_id = db.Column(db.Integer, primary_key=True)
-    account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number', ondelete='CASCADE'), nullable=False)
+    account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number', ondelete='CASCADE'),
+                               nullable=False)
     account_type = db.Column(db.String(100), nullable=False)
 
 
 class Card(db.Model):
-    card_number = db.Column(db.BigInteger, primary_key=True)
+    card_number = db.Column(db.BigInteger, primary_key=True, default=1000)
     cvv_number = db.Column(db.Integer, nullable=False)
     card_pin = db.Column(db.Integer, nullable=False)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     expiry_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number', ondelete='CASCADE'), nullable=False)
+    account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number', ondelete='CASCADE'),
+                               nullable=False)
 
 
 class Transaction(db.Model):
@@ -100,7 +103,8 @@ class Transaction(db.Model):
 
 class TransactionType(db.Model):
     transaction_type_id = db.Column(db.Integer, primary_key=True)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.transaction_id', ondelete='CASCADE'), nullable=False)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.transaction_id', ondelete='CASCADE'),
+                               nullable=False)
     transaction_type = db.Column(db.String(100), nullable=False)
 
 
@@ -140,7 +144,8 @@ class FixedDeposit(db.Model):
     fd_status = db.Column(db.String(100), nullable=False, default='Inactive')
     rate_interest = db.Column(db.Float, nullable=False, default=0.0)
     added_amount = db.Column(db.Float, nullable=False, default=0.0)
-    account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number', ondelete='CASCADE'), nullable=False)
+    account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number', ondelete='CASCADE'),
+                               nullable=False)
 
 
 class BankDetails(db.Model):
@@ -151,13 +156,25 @@ class BankDetails(db.Model):
     branch = relationship("Branch", cascade="all, delete")
     atm = relationship("Atm", cascade="all, delete")
 
+
 class Branch(db.Model):
     branch_id = db.Column(db.Integer, primary_key=True)
     branch_name = db.Column(db.String(20), unique=True, nullable=False)
     branch_address = db.Column(db.String(120), unique=True, nullable=False)
     bank_id = db.Column(db.Integer, db.ForeignKey('bank_details.bank_id', ondelete='CASCADE'), nullable=False)
 
+
 class Atm(db.Model):
     atm_id = db.Column(db.Integer, primary_key=True)
     atm_address = db.Column(db.String(120), unique=True, nullable=False)
     bank_id = db.Column(db.Integer, db.ForeignKey('bank_details.bank_id', ondelete='CASCADE'), nullable=False)
+
+
+class BankMember(db.Model):
+    image_file = db.Column(db.Text, nullable=False)
+    bank_member_id = db.Column(db.Integer, primary_key=True)
+    bank_member_name = db.Column(db.String, nullable=False)
+    bank_member_position = db.Column(db.String, nullable=False, default='Bank member')
+    bank_member_about = db.Column(db.String(320))
+    bank_member_email_id = db.Column(db.String(320), nullable=False)
+    bank_member_contact = db.Column(db.BigInteger, nullable=False)

@@ -19,7 +19,7 @@ NOTE: YOU CAN ONLY DELETE USER IF THEY HAVE 0.0 ACCOUNT BALANCE
                         <th style="text-align:left"><pre>Account status   </pre></th>
                         <th style="text-align:left"><pre>Delete user   </pre></th>
                     </tr>
-                    {% for user in users %}
+                    {% for user in users.items %}
                     {% if user.user_email!='steffy.inexture@gmail.com' %}
                     <tr>
                         <td><pre>{{user.user_id}}   </pre></td>&nbsp;
@@ -40,11 +40,27 @@ NOTE: YOU CAN ONLY DELETE USER IF THEY HAVE 0.0 ACCOUNT BALANCE
                         {% endif %}
 
                         {% endfor%}
+
+
                         <td><pre>  </pre></td>&nbsp;
                     </tr>
                     {%endif%}
                     {% endfor %}
                 </table>
+==============
+                {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)  %}
+                            {% if page_num %}
+                                {% if users.page == page_num %}
+                <a href="{{ url_for('admin.admin_user_data', page=page_num)}}"><button>{{page_num}}</button></a>
+                                {% else %}
+
+                <a href="{{ url_for('admin.admin_user_data', page=page_num)}}"><button>{{page_num}}</button></a>
+                                {% endif %}
+                            {% else %}
+                                ...
+                            {% endif %}
+
+                        {% endfor %}=================
                 <hr>
                 <a href="{{url_for('users.register')}}"><button>Add new User</button></a>
             </div>

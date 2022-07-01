@@ -22,7 +22,7 @@
                         <th style="text-align:left"><pre>Loan approval   </pre></th>
 
                     </tr>
-                    {% for user in user %}
+                    {% for user in user.items %}
                     {% if user.user_email!='steffy.inexture@gmail.com' %}
                     <tr>
 
@@ -56,6 +56,20 @@
                     {%endif%}
                     {% endfor %}
                 </table>
+
+                {% for page_num in user.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)  %}
+                            {% if page_num %}
+                                {% if user.page == page_num %}
+                <a href="{{ url_for('admin.admin_user_loan_data', page=page_num)}}"><button>{{page_num}}</button></a>
+                                {% else %}
+
+                <a href="{{ url_for('admin.admin_user_loan_data', page=page_num)}}"><button>{{page_num}}</button></a>
+                                {% endif %}
+                            {% else %}
+                                ...
+                            {% endif %}
+
+                        {% endfor %}
                 <hr>
                 <a href="{{url_for('users.register')}}"><button>Add other loan for users</button></a>
             </div>

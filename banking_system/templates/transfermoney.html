@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="content-section">
+		<form method="POST" action="">
+			{{ form.hidden_tag() }}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Account status change</legend>
+				<input type="hidden" value="{{form.user_id.data}}">
+				<div class="form-group">
+					{{ form.user_id.label(class="form-control-label")}}
+					{% if form.user_id.errors %}
+						{{ form.user_id(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in form.user_id.errors %}
+							<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.user_id(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group">
+					{{ form.user_name.label(class="form-control-label")}}
+					{% if form.user_name.errors %}
+						{{ form.user_name(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in form.user_name.errors %}
+							<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.user_name(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+
+
+
+				<div class="form-group">
+					{{ form.transfer_choice.label(class="form-control-label")}}
+					{% if form.transfer_choice.errors %}
+						{{ form.transfer_choice(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in form.transfer_choice.errors %}
+							<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.transfer_choice(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group">
+					{{ form.transfer_amount.label(class="form-control-label")}}
+					{% if form.transfer_amount.errors %}
+						{{ form.transfer_amount(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in form.transfer_amount.errors %}
+							<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.transfer_amount(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+
+				<div class="form-group">
+
+					{{ form.otp_btn.label(class="form-control-label")}}
+					{% if form.otp_btn.errors %}
+						{{ form.otp_btn(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in form.otp_btn.errors %}
+							<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+<!--						<button name="forwardBtn" onclick="{{url_for('users.send_otp_fun',current_user=current_user)}}">OTP</button>-->
+						<a href=# id=test><button class='btn btn-default'>OTP</button></a>
+					{{ form.otp_btn(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+
+				<div class="form-group">
+					{{ form.enter_otp.label(class="form-control-label")}}
+					{% if form.enter_otp.errors %}
+						{{ form.enter_otp(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in form.enter_otp.errors %}
+							<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.enter_otp(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+
+				<div class="form-group">
+					{{ form.user_password.label(class="form-control-label")}}
+					{% if form.user_password.errors %}
+						{{ form.user_password(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in form.user_password.errors %}
+							<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.user_password(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+
+			</fieldset>
+			<div class="form-group">
+				{{ form.submit(class="btn btn-outline-info") }}
+			</div>
+		</form>
+	</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+	    $('.').click(function (e){
+        e.preventDefault();
+        var user_id = $("[name='user_id']").val();
+        console.log("Button Clicked", e);
+        console.log(user_id)
+         {
+            mydata = {user_id: user_id};
+            $.ajax({
+                url : "/send-otp/<current_user>/",
+                method : "POST",
+                data : mydata,
+                success:function(data){
+                    if (data.status == "Save"){
+                    }
+                }
+            })
+        }
+    });
+</script>
+
+<a href=# id=a#test2><button class='btn btn-default'>OTP</button></a>
+
+{% endblock content %}

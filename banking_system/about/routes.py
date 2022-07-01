@@ -1,8 +1,10 @@
-from flask import render_template, Blueprint
+from flask import render_template
 from flask import Blueprint
 
 about = Blueprint('about', __name__)
 
+
+#this is just for the showing data
 @about.route("/money")
 def money():
     return render_template('money.html', title='money')

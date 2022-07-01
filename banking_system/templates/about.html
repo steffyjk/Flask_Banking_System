@@ -20,15 +20,17 @@ color: white;">
 <br>
 <h2 style="text-align:center">Our Team</h2>
 <div class="row">
+	{% for member in bank_member %}
 	<div class="column" style=" float: left;width: 33.3%;margin-bottom: 16px;padding: 0 8px;">
 		<div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);margin: 8px;">
-			<img src="{{url_for('static', filename='pics/cto.png')}}" alt="Jane" style="width:100%; height: 250px;">
+			<img src="{{url_for('static', filename='pics/'+member.image_file)}}" alt="Picture" style="width:100%; height: 250px;">
 			<hr style="background-color:rgb(25, 25, 53);">
 			<div class="container" style="padding: 0 16px;">
-				<h2>Steffy jk</h2>
-				<p class="title" style="color: grey;">CEO & Founder</p>
-				<p>Some text that describes me lorem ipsum ipsum lorem.</p>
-				<p>steffy.jk2018@gmail.com</p>
+				<h2>{{member.bank_member_name}}</h2>
+				{{member.bank_member_position}}
+				<p class="title" style="color: grey;">{{member.bank_member_position}}</p>
+				<p>{{member.bank_member_about}}</p>
+				<p>{{member.bank_member_email_id}}</p>
 				<p><button class="button" style="border: none;
 					outline: 0;
 					display: inline-block;
@@ -37,53 +39,10 @@ color: white;">
 					background-color: rgb(25, 25, 53);
 					text-align: center;
 					cursor: pointer;
-					width: 100%;">Contact</button></p>
+					width: 100%;">Contact: {{member.bank_member_contact}}</button></p>
 			</div>
 		</div>
 	</div>
-
-	<div class="column" style=" float: left;width: 33.3%;margin-bottom: 16px;padding: 0 8px;">
-		<div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);margin: 8px;">
-			<img src="{{url_for('static', filename='pics/cto2.png')}}" alt="Mike" style="width:100%; height: 250px;">
-			<hr style="background-color:rgb(25, 25, 53);">
-			<div class="container" style="padding: 0 16px;">
-				<h2>Stella_Jk02</h2>
-				<p class="title" style="color: grey;">Art Director</p>
-				<p>Some text that describes me lorem ipsum ipsum lorem.</p>
-				<p>stella.jk2018@gmail.com</p>
-				<p><button class="button" style="border: none;
-					outline: 0;
-					display: inline-block;
-					padding: 8px;
-					color: white;
-					background-color: rgb(25, 25, 53);
-					text-align: center;
-					cursor: pointer;
-					width: 100%;">Contact</button></p>
-			</div>
-		</div>
-	</div>
-
-	<div class="column" style=" float: left;width: 33.3%;margin-bottom: 16px;padding: 0 8px;">
-		<div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);margin: 8px;">
-			<img src="{{url_for('static', filename='pics/cto3.png')}}" alt="John" style="width:100%; height: 250px;">
-			<hr style="background-color:rgb(25, 25, 53);">
-			<div class="container" style="padding: 0 16px;">
-				<h2>Rozi_JK</h2>
-				<p class="title" style="color: grey;">mAIN Leader</p>
-				<p>Some text that describes me lorem ipsum ipsum lorem.</p>
-				<p>johnsoa@gmail.com</p>
-				<p><button class="button" style="border: none;
-					outline: 0;
-					display: inline-block;
-					padding: 8px;
-					color: white;
-					background-color:rgb(25, 25, 53);
-					text-align: center;
-					cursor: pointer;
-					width: 100%;">Contact</button></p>
-			</div>
-		</div>
-	</div>
+	{% endfor %}
 </div>
 {% endblock content %}
