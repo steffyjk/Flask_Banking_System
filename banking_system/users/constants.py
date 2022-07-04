@@ -15,21 +15,13 @@ ALREADY_CARD_EXISTED = 'You have already Card'
 CARD_CREATED = 'your card has been created'
 PENDING_LOAN = 'you have already current loan going on finish that  first'
 TRANSACTION_SUCCESSFULLY = "Transaction is successfully done"
-CANT_TRANSFER = 'You can not transfer to yourself it doesn\'t make any sense'
+CANT_TRANSFER = 'You can not transfer to yourself it does\'t make any sense'
 PASSWORD_INCORRECT = 'Password is incorrect'
-
-
-def insufficient_balance(data):
-    return 'Insufficient balance you have only:data'
-
-def success_activity(activity):
-    flash = f'Your {activity} has been requested with inactive status'
-    return flash
-
-def pending_activity(activity):
-    flash = f'You have already current {activity} already'
-    return flash
-
+INSUFFICIENT_BALANCE = 'Insufficient balance you have only:{data}'
+SUCCESS_ACTIVITY = 'Your {activity} has been requested with inactive status'
+PENDING_ACTIVITY = 'You have already current {activity} already'
+BRANCH_CHANGED = 'Bank branch has been updated/changed'
+ERROR = 'There is some error'
 
 FLASH_MESSAGES = {
     'SUCCESS': 'success',

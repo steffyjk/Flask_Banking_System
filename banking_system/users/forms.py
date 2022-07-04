@@ -1,15 +1,13 @@
-# from email_validator import validate_email
-import email_validator
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, RadioField, URLField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, url
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, RadioField, \
+    URLField, SelectField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from banking_system.models import Account, User, Loan, FixedDeposit
-from validate_email_address import validate_email
+from banking_system.users.utils import CustomValidation
 
 
-# used in banking system
-class RegistrationForm(FlaskForm):
+class RegistrationForm(FlaskForm, CustomValidation):
     user_name = StringField('Username: ', validators=[DataRequired(), Length(min=2, max=20)])
     user_email = StringField('Email: ', validators=[DataRequired(), Email()])
     user_phone_number = IntegerField('Phone number: ', validators=[DataRequired()])
@@ -23,17 +21,10 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_user_name(self, user_name):
-        user = User.query.filter_by(user_name=user_name.data).first()
-        if user:
-            raise ValidationError('That username is taken please Choose different one')
+        super().validate_user_name(user_name)
 
     def validate_user_email(self, user_email):
-        isvalid = validate_email(user_email.data, verify=True)
-        email = User.query.filter_by(user_email=user_email.data).first()
-        if email:
-            raise ValidationError('That email is taken please Choose different one')
-        if not isvalid:
-            raise ValidationError('This email id is not exist')
+        super().validate_user_email(user_email)
 
     def validate_user_phone_number(self, user_phone_number):
         if len(str(user_phone_number.data)) != 10:
@@ -183,3 +174,12 @@ class TransferMoney(FlaskForm):
     def validate_user_password(self, user_password):
         if user_password.data != current_user.user_password:
             raise ValidationError('Password incorrect')
+
+
+# change the branch
+class ChangeBranch(FlaskForm):
+    user_id = IntegerField('User id:  ', validators=[DataRequired()], render_kw={'readonly': True})
+    user_name = StringField('User name ', validators=[DataRequired()], render_kw={'readonly': True})
+    account_number = StringField('Account number', validators=[DataRequired()], render_kw={'readonly': True})
+    myField = SelectField('Available branches', choices=[], validators=[DataRequired()], validate_choice=False)
+    submit = SubmitField('Change the bank branch')

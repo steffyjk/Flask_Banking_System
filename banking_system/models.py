@@ -4,7 +4,6 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from sqlalchemy.orm import relationship
 from banking_system import db, login_manager
 from flask_login import UserMixin
-from sqlalchemy.schema import Sequence
 
 
 @login_manager.user_loader
@@ -143,6 +142,8 @@ class FixedDeposit(db.Model):
     fd_amount = db.Column(db.Float, nullable=False, default=0.0)
     fd_status = db.Column(db.String(100), nullable=False, default='Inactive')
     rate_interest = db.Column(db.Float, nullable=False, default=0.0)
+    fd_create_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    fd_duration = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     added_amount = db.Column(db.Float, nullable=False, default=0.0)
     account_number = db.Column(db.BigInteger, db.ForeignKey('account.account_number', ondelete='CASCADE'),
                                nullable=False)

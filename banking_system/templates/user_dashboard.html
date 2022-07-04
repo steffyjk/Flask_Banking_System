@@ -12,16 +12,19 @@
         <pre
             style="background-color: black; color:aliceblue">&nbsp;&nbsp;&nbsp;&nbsp;As a user you have this many options available :</pre>
         <hr>
-        <button><a href="{{ url_for('users.request_account') }}">Request bank account</a></button>&nbsp;&nbsp;
-        <button><a href="{{ url_for('users.request_card') }}">Card Request</a></button>&nbsp;&nbsp;
+<!--        <button><a href="{{ url_for('users.request_account') }}">Request bank account</a></button>&nbsp;&nbsp;-->
+
+        <button><a href="{{ url_for('users.change_branch') }}">Change the bank branch</a></button>&nbsp;&nbsp;
         <button><a href="{{ url_for('users.apply_loan') }}">Loan Request</a></button>&nbsp;&nbsp;
         <button><a href="{{ url_for('users.request_insurance') }}">Insurance Request</a></button>&nbsp;&nbsp;
         <button><a href="{{ url_for('users.add_fixed_deposit') }}">Add Fixed deposits</a></button>
 
         <hr>
 
-        <button><a href="{{ url_for('users.add_money') }}">Add Money</a></button>&nbsp;&nbsp;&nbsp;
-        <button><a href="{{ url_for('users.transfer_money') }}">Transfer money</a></button>
+        <button><a href="{{ url_for('users.add_money') }}">Transfer to other user</a></button>&nbsp;&nbsp;&nbsp;
+        <button><a href="{{ url_for('users.transfer_money') }}">Transfer money in your account</a></button>
+<!--        {{current_user.user_name}}-->
+        <button><a href="{{ url_for('users.fd_interest_money') }}">Apply to get Fd interest</a></button>
         <br>
         <hr>
         <pre style="background-color: black; color:aliceblue">&nbsp;&nbsp;&nbsp;&nbsp;This is all your detail :</pre>

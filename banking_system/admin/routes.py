@@ -15,6 +15,15 @@ from flask import Blueprint
 
 admin = Blueprint('admin', __name__)
 
+# # admin required decorator
+# def admin_login_required(f):
+#     @wraps(f)
+#     def wrap(*args, **kwargs):
+#         # user is available from @login_required
+#         if not g.user.is_admin:
+#             return "you need to be admin", 401
+#     return wrap(*args, **kwargs)
+# return wraps()
 
 # this is for the admin login only
 @admin.route("/admin_login", methods=['GET', 'POST'])
