@@ -6,14 +6,16 @@ from flask import render_template, url_for, flash, redirect, request, current_ap
 from flask_login import login_user, login_required
 from banking_system import db, bcrypt
 from banking_system.admin.constants import ADMIN_LOGIN_SUCCESS, FLASH_MESSAGES, ADMIN_LOGIN_UNSUCCESS, USER_DELETED, \
-    status_update, BRANCH_EXISTED, BRANCH_ADDED, ATM_EXISTED, ATM_ADDED, BANK_MEMBER_DELETED, BANK_MEMBER_ADDED
+    BRANCH_EXISTED, BRANCH_ADDED, ATM_EXISTED, ATM_ADDED, BANK_MEMBER_DELETED, BANK_MEMBER_ADDED, \
+    STATUS_UPDATE
 from banking_system.models import Atm, User, Branch, BankDetails, Account, Loan, LoanType, Insurance, InsuranceType, \
-    FixedDeposit, Transaction, TransactionType, BankMember
+    FixedDeposit, Transaction, TransactionType, BankMember, MemberRole
 from banking_system.admin.forms import AddBranch, LoginForm, AddAtm, UserAccountStatus, LoanApprovalStatus, \
-    insurance_approval_form, BankMemberData
+    InsuranceApprovalForm, BankMemberData, UpdateFdStatus, AddMemberRole
 from flask import Blueprint
 
 admin = Blueprint('admin', __name__)
+
 
 # # admin required decorator
 # def admin_login_required(f):
@@ -84,7 +86,7 @@ def admin_branch_data():
 @admin.route("/all-atm-data", methods=['GET', 'POST'])
 def admin_atm_data():
     page = request.args.get('page', 1, type=int)
-    atms = Atm.query.order_by(Atm.atm_id.desc()).paginate(page=page, per_page=5)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    atms = Atm.query.order_by(Atm.atm_id.desc()).paginate(page=page, per_page=5)
     return render_template('admin_atm_data.html', atms=atms)
 
 
@@ -120,8 +122,7 @@ def loan_approval(user_id,
         else:
             loan.loan_status = 'Inactive'
         db.session.commit()
-        flash_msg = status_update(user_name, 'loan')
-        flash(flash_msg, FLASH_MESSAGES['SUCCESS'])
+        flash(STATUS_UPDATE.format(user_name, 'loan'), FLASH_MESSAGES['SUCCESS'])
         return redirect(url_for('admin.admin_user_loan_data'))
     elif request.method == 'GET':
         form.user_id.data = user_id
@@ -184,7 +185,7 @@ def insurance_approval(user_id,
                        insurance_type,
                        insurance_status
                        ):
-    form = insurance_approval_form()
+    form = InsuranceApprovalForm()
     if form.validate_on_submit():
         approval_status = form.approval_status.data
         insurance = Insurance.query.filter_by(user_id=user_id).first()
@@ -193,8 +194,7 @@ def insurance_approval(user_id,
         else:
             insurance.insurance_status = 'Inactive'
         db.session.commit()
-        flash_msg = status_update(user_name, 'insurance')
-        flash(flash_msg, FLASH_MESSAGES['SUCCESS'])
+        flash(STATUS_UPDATE.format(user_name=user_name, activity='insurance'), FLASH_MESSAGES['SUCCESS'])
         return redirect(url_for('admin.admin_user_insurance_data'))
     elif request.method == 'GET':
         form.user_id.data = user_id
@@ -227,6 +227,38 @@ def admin_user_fd_data():
                            users=users, account=account)
 
 
+@admin.route("/update-fd-status/<user_id>", methods=['GET', 'POST'])
+def update_fd_status(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    account = Account.query.filter_by(user_id=user.user_id).first()
+    fd = FixedDeposit.query.filter_by(account_number=account.account_number).first()
+    form = UpdateFdStatus()
+    if form.validate_on_submit():
+        status = form.fd_status.data
+        fd.fd_status = status
+        db.session.commit()
+        flash(STATUS_UPDATE.format(user_name=user.user_name,activity='Fd'),FLASH_MESSAGES['SUCCESS'])
+        return redirect(url_for('admin.admin_user_fd_data'))
+    elif request.method == 'GET':
+        form.user_id.data = user.user_id
+        form.user_name.data = user.user_name
+        form.fd_id.data = fd.fd_id
+        form.fd_amount.data = fd.fd_amount
+
+    return render_template(
+        'update_fd_status.html',
+        title='fd-status', form=form
+    )
+
+
+@admin.route("/delete-fd/<user_id>", methods=['GET', 'POST'])
+def delete_fd(user_id):
+    print("this is user_id from ajax: ",user_id)
+    user = User.query.filter_by(user_id=user_id).first()
+    print("this is name: ",user.user_name)
+    flash(f"{user.user_name} this is the name",'success')
+    return redirect(url_for('admin.admin_user_fd_data'))
+
 # approve/decline the fixed deposites requests from the bank users
 @admin.route(
     "/fd-approval-status/<user_id>/<user_name>/<insurance_id>/<insurance_amount>/<insurance_type>/<insurance_status>",
@@ -238,7 +270,7 @@ def fd_approval(user_id,
                 insurance_type,
                 insurance_status
                 ):
-    form = insurance_approval_form()
+    form = InsuranceApprovalForm()
     if form.validate_on_submit():
         approval_status = form.approval_status.data
         insurance = Insurance.query.filter_by(user_id=user_id).first()
@@ -247,8 +279,7 @@ def fd_approval(user_id,
         else:
             insurance.insurance_status = 'Inactive'
         db.session.commit()
-        flash_msg = status_update(user_name, 'FD')
-        flash(flash_msg, FLASH_MESSAGES['SUCCESS'])
+        flash(STATUS_UPDATE.format(user_name=user_name, activity='FD'), FLASH_MESSAGES['SUCCESS'])
         return redirect(url_for('admin.admin_user_insurance_data'))
     elif request.method == 'GET':
         form.user_id.data = user_id
@@ -282,8 +313,7 @@ def account_status(user_id, user_name, account_number):
         else:
             account.account_status = 'Active'
         db.session.commit()
-        flash_msg = status_update(user_name, 'account')
-        flash(flash_msg, FLASH_MESSAGES['SUCCESS'])
+        flash(STATUS_UPDATE.format(user_name=user_name, activity='Account'), FLASH_MESSAGES['SUCCESS'])
         return redirect(url_for('admin.admin_dashboard'))
     elif request.method == 'GET':
         form.user_id.data = user_id
@@ -404,3 +434,24 @@ def delete_bank_member(member_id, member_position):
     flash(BANK_MEMBER_DELETED, FLASH_MESSAGES['SUCCESS'])
     print(member)
     return redirect(url_for('admin.admin_dashboard'))
+
+
+# add new bank member role of the bank
+@admin.route("/add-bank-role", methods=['GET', 'POST'])
+def member_role_list():
+    form = AddMemberRole()
+    if form.validate_on_submit():
+        role_name=form.role_name.data
+        role = MemberRole.query.filter_by(member_role=role_name).first()
+        if role:
+            flash("this role is already exist",'danger')
+            return redirect(url_for('admin.admin_dashboard'))
+        else:
+            add_role = MemberRole(member_role=role_name)
+            db.session.add(add_role)
+            db.session.commit()
+            flash("new role has been added",'success')
+            return redirect(url_for('admin.admin_dashboard'))
+
+
+    return render_template('add_member_role_list.html', title='add-member-role-list', form=form)

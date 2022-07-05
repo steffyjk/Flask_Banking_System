@@ -41,12 +41,11 @@ class CustomValidation:
             raise ValidationError('That username is taken please Choose different one')
 
     def validate_user_email(self, user_email):
-        isvalid = validate_email(user_email.data, verify=True)
-        print("##################",isvalid)
+        isvalid = validate_email('user_email', verify=True)
         email = User.query.filter_by(user_email=user_email.data).first()
         if email:
             raise ValidationError('That email is taken please Choose different one')
-        if not isvalid:
+        if isvalid:
             raise ValidationError('This email id is not exist')
 
 

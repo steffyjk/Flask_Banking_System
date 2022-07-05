@@ -179,3 +179,16 @@ class BankMember(db.Model):
     bank_member_about = db.Column(db.String(320))
     bank_member_email_id = db.Column(db.String(320), nullable=False)
     bank_member_contact = db.Column(db.BigInteger, nullable=False)
+
+
+class MemberRole(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    member_role = db.Column(db.String)
+
+class LoanDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    loan_name = db.Column(db.String)
+
+class InsuranceDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    insurance_name = db.Column(db.String)

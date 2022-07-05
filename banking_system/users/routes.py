@@ -181,12 +181,25 @@ def profile():
     if form.validate_on_submit():
 
         current_user.user_name = form.user_name.data
+        current_user.user_phone_number = form.user_phone_number.data
+        current_user.user_first_name = form.user_first_name.data
+        current_user.user_last_name = form.user_last_name.data
+        current_user.user_address = form.user_address.data
+        current_user.user_age = form.user_age.data
+        current_user.date_of_birth = form.date_of_birth.data
 
         db.session.commit()
         flash(ACCOUNT_UPDATED, FLASH_MESSAGES['SUCCESS'])
-        return redirect(url_for('users.profile'))
+        return redirect(url_for('users.dashboard'))
     elif request.method == 'GET':
         form.user_name.data = current_user.user_name
+        form.user_phone_number.data = current_user.user_phone_number
+        form.user_first_name.data = current_user.user_first_name
+        form.user_last_name.data = current_user.user_last_name
+        form.user_address.data = current_user.user_address
+        form.user_age.data = current_user.user_age
+        form.date_of_birth.data = current_user.date_of_birth
+        form.user_email.data = current_user.user_email
 
     return render_template('user_profile.html', title='Account', form=form)
 

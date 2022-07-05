@@ -46,21 +46,26 @@ class LoginForm(FlaskForm):
 
 # update the suer profile
 class UpdateAccountForm(FlaskForm):
-    user_name = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
-    user_email = StringField('Email', validators=[DataRequired(), Email()], render_kw={'readonly': True})
-    submit = SubmitField('Update', )
+    user_name = StringField('Username: ', validators=[DataRequired(), Length(min=2, max=20)])
+    user_email = StringField('Email: ', validators=[DataRequired(), Email()],render_kw={'readonly': True})
+    user_phone_number = IntegerField('Phone number: ', validators=[DataRequired()])
+    user_first_name = StringField('First name: ', validators=[DataRequired()])
+    user_last_name = StringField('Last name: ', validators=[DataRequired()])
+    user_address = StringField('Address: ', validators=[DataRequired()])
+    user_age = IntegerField('Age: ', validators=[DataRequired()])
+    date_of_birth = DateField('Date of birth', format='%Y-%m-%d')
+    submit = SubmitField('Update the profile data')
 
-    def validate_username(self, user_name):
+    def validate_user_name(self, user_name):
         if user_name.data != current_user.user_name:
             user = User.query.filter_by(user_name=user_name.data).first()
             if user:
                 raise ValidationError('That username is taken please Choose different one')
 
-    def validate_email(self, user_email):
-        if user_email.data != current_user.user_email:
-            user_email = User.query.filter_by(user_email=user_email.data).first()
-            if user_email:
-                raise ValidationError('That email is taken please Choose different one')
+    def validate_user_phone_number(self,user_phone_number):
+        if len(str(user_phone_number.data))!=10:
+            raise ValidationError('Phone number must be 10 digits')
+
 
 
 # request for resetg the password

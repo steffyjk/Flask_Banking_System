@@ -36,12 +36,16 @@
                                         <th style="text-align:left"><pre>{{fd.fd_amount}}     </pre></th>&nbsp;
                                         <th style="text-align:left"><pre>{{fd.rate_interest}}     </pre></th>&nbsp;
                                         <th style="text-align:left"><pre>{{fd.added_amount}}     </pre></th>&nbsp;
-                                        <th style="text-align:left"><pre>{{fd.fd_status}}     </pre></th>&nbsp;
-                                        {% if fd.fd_amount!=0.0 %}
+                                        <th style="text-align:left"><pre><a href="{{url_for('admin.update_fd_status',
+                                                                    user_id=user.user_id)}}">x<button>{{fd.fd_status}}     </button></a></pre></th>&nbsp;
+                                        {% if fd.fd_amount==0.0 %}
                                         <td><pre><button>not delete</button> </pre></td>
                                         {% else %}
-                                        <td><pre><button><a href="{{url_for('admin.delete_user',
-                                                                    user_id=user.user_id)}}">delete</button> </pre></td>
+                                        <td><pre><button id="demodelete")>delete</button> </pre></td>
+<!--                                        <p id="demo"></p>-->
+
+                                        <a id="delete" href="{{url_for('admin.delete_fd',user_id=user.user_id)}}"></a>
+
                                         {% endif %}
                                     </tr>
                                     {% endif %}
@@ -49,12 +53,51 @@
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
-
-
-
                 </table>
                 <hr>
-                <a href="{{url_for('users.register')}}"><button>Add other loan for users</button></a>
+<!--                <a href="{{url_for('users.register')}}"><button>Add other loan for users</button></a>-->
             </div>
     </div>
+<!--<script>-->
+<!--    $(function()-->
+<!--        {-->
+<!--            $('#demodelete').click(function()-->
+<!--            {-->
+<!--                var confirm = confirm("Are you sure?");-->
+<!--                if (confirm == true)-->
+<!--                    {-->
+<!--                    $.ajax({-->
+<!--                        url: '/delete_fd/{{user_id}}',-->
+<!--                        success: function(response)-->
+<!--                        {-->
+<!--                            console.log(response);-->
+<!--                        }});-->
+<!--                    }-->
+<!--            });-->
+<!--    });-->
+
+<!--</script>-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+    $(function()
+
+        {
+            $('#demodelete').click(function()
+            {
+                console.log("yheh")
+                var confirm = confirm("Are you sure?");
+                if (confirm == true)
+                    {
+                    $.ajax({
+<!--                    console.log(user_id)-->
+                        url: '/delete_fd/user.user_id',
+<!--                        url: '/delete_fd/'+user_id,-->
+<!--                        url: {{url_for('admin.delete_fd',user_id=user_id)}}-->
+                        success: function(response)
+                        {
+                            console.log(response);
+                        }});
+                    }
+            });
+    });
+</script>
 {% endblock content %}

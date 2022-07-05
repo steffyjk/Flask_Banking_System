@@ -37,7 +37,7 @@ class LoanApprovalStatus(FlaskForm):
 
 
 # approve insurance request which is sent by bank user
-class insurance_approval_form(FlaskForm):
+class InsuranceApprovalForm(FlaskForm):
     user_id = StringField('User_id', validators=[DataRequired()], render_kw={'readonly': True})
     user_name = StringField('User name', validators=[DataRequired()], render_kw={'readonly': True})
     insurance_id = StringField('Insurance id', validators=[DataRequired()], render_kw={'readonly': True})
@@ -46,6 +46,16 @@ class insurance_approval_form(FlaskForm):
     insurance_status = StringField('Insurance status', validators=[DataRequired()], render_kw={'readonly': True})
     approval_status = RadioField('Approval status', choices=[('1', 'Approve'), ('2', 'Decline')])
     submit = SubmitField('Submit the changes')
+
+
+# update the user's FD details
+class UpdateFdStatus(FlaskForm):
+    user_id = StringField('User_id', validators=[DataRequired()], render_kw={'readonly': True})
+    user_name = StringField('User name', validators=[DataRequired()], render_kw={'readonly': True})
+    fd_id = StringField('User name', validators=[DataRequired()], render_kw={'readonly': True})
+    fd_amount = StringField('User name', validators=[DataRequired()], render_kw={'readonly': True})
+    fd_status = RadioField('Member Position', choices=[('Inactive', 'Inactive'), ('Active', 'Active')])
+    submit = SubmitField('Update the Fd detail')
 
 
 # add new branch of bank
@@ -66,11 +76,16 @@ class BankMemberData(FlaskForm):
     image_file = FileField('add photo: ', validators=[DataRequired(), FileAllowed(['jpg', 'png'])])
     bank_member_name = StringField('Member name: ', validators=[DataRequired()])
     bank_member_position = RadioField('Member Position', choices=[('CEO', 'CEO'),
-                                                              ('CTO', 'CTO'),
-                                                              ('Accountant', 'Accountant'),
-                                                              ('Main Leader', 'Main leader')])
+                                                                  ('CTO', 'CTO'),
+                                                                  ('Accountant', 'Accountant'),
+                                                                  ('Main Leader', 'Main leader')])
     bank_member_about = TextAreaField('about member', validators=[DataRequired()])
     bank_member_email_id = EmailField('Email id', validators=[DataRequired()])
     bank_member_contact = IntegerField('Contact number', validators=[DataRequired()])
 
     submit = SubmitField('Update the members')
+
+# admin can add new atm of the bank
+class AddMemberRole(FlaskForm):
+    role_name = StringField('Role : ', validators=[DataRequired()])
+    submit = SubmitField('Add this to role list')
