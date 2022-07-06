@@ -6,16 +6,16 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Add new atm</legend>
             <div class="form-group">
-                {{ form.atm_address.label(class="form-control-label")}}
-                {% if form.atm_address.errors %}
-                {{ form.atm_address(class="form-control form-control-lg is-invalid")}}
+                {{ form.insurance_choice.label(class="form-control-label")}}
+                {% if form.insurance_choice.errors %}
+                {{ form.insurance_choice(class="form-control form-control-lg is-invalid")}}
                 <div class="invalid-feedback">
-                    {% for error in form.atm_address.errors %}
+                    {% for error in form.insurance_choice.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.atm_address(class="form-control form-control-lg") }}
+                {{ form.insurance_choice(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
         </fieldset>

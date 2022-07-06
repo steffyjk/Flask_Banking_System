@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, RadioField, \
-    TextAreaField, FileField, EmailField
+    TextAreaField, FileField, EmailField, SelectField
 from wtforms.validators import DataRequired, Email
 
 
@@ -73,19 +73,26 @@ class AddAtm(FlaskForm):
 
 # about bank member data
 class BankMemberData(FlaskForm):
-    image_file = FileField('add photo: ', validators=[DataRequired(), FileAllowed(['jpg', 'png'])])
+    image_file = FileField('add photo: ', validators=[DataRequired(), FileAllowed(['jpg', 'png','jpeg'])])
     bank_member_name = StringField('Member name: ', validators=[DataRequired()])
-    bank_member_position = RadioField('Member Position', choices=[('CEO', 'CEO'),
-                                                                  ('CTO', 'CTO'),
-                                                                  ('Accountant', 'Accountant'),
-                                                                  ('Main Leader', 'Main leader')])
+    bank_member_position = SelectField('Member Position', choices=[], validators=[DataRequired()], validate_choice=False)
     bank_member_about = TextAreaField('about member', validators=[DataRequired()])
     bank_member_email_id = EmailField('Email id', validators=[DataRequired()])
     bank_member_contact = IntegerField('Contact number', validators=[DataRequired()])
 
     submit = SubmitField('Update the members')
 
-# admin can add new atm of the bank
+# admin can add member role of the bank
 class AddMemberRole(FlaskForm):
     role_name = StringField('Role : ', validators=[DataRequired()])
     submit = SubmitField('Add this to role list')
+
+# admin can add loan choice of the bank
+class LoanChoice(FlaskForm):
+    loan_choice = StringField('Loan name : ', validators=[DataRequired()])
+    submit = SubmitField('Add this to Loan choice list')
+
+# admin can add loan choice of the bank
+class InsuranceChoice(FlaskForm):
+    insurance_choice = StringField('insurance name : ', validators=[DataRequired()])
+    submit = SubmitField('Add this to insurance choice list')

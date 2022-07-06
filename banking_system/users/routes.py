@@ -3,11 +3,11 @@ from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import func
 from banking_system import db, bcrypt
 from banking_system.models import Account, Branch, Card, FixedDeposit, Insurance, Loan, \
-    Transaction, TransactionType, User
+    Transaction, TransactionType, User, LoanDetails, InsuranceDetails
 from banking_system.users.forms import AddMoney, RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, \
-    ResetPasswordForm, ApplyLoanForm, TransferMoney, ChangeBranch
+    ResetPasswordForm, ApplyLoanForm, TransferMoney, ChangeBranch, ApplyInsuranceForm
 from banking_system.users.utils import send_reset_email, send_otp_email, role_assign, add_loan_type, loan_type, \
-    insurance_type, fd_interest
+    insurance_type, fd_interest, add_transaction_type
 import random
 import datetime
 from banking_system.users.constants import FLASH_MESSAGES, NEW_USER_ADDED, SUCCESSFUL_REGISTRATION, \
@@ -143,11 +143,12 @@ def dashboard():
             (Transaction.receiver_id == current_user.user_id) |
             (Transaction.sender_id == current_user.user_id)
         ).all()
-        transaction_type = None
-        for tran in transaction:
-            transaction_type = TransactionType.query.filter(
-                (TransactionType.transaction_id == tran.transaction_id)
-            ).all()
+        transaction_type=TransactionType.query.all()
+        # transaction_type = None
+        # for tran in transaction:
+        #     transaction_type = TransactionType.query.filter(
+        #         (TransactionType.transaction_id == tran.transaction_id)
+        #     ).all()
 
         loan = Loan.query.filter_by(user_id=account.user_id).first()
         insurance = Insurance.query.filter_by(user_id=account.user_id).first()
@@ -332,14 +333,7 @@ def apply_loan():
             else:
                 rate_interest = '6.7'
 
-            if loan_type == '1':
-                loan_type = 'Personal loan'
-            elif loan_type == '2':
-                loan_type = 'Education loan'
-            elif loan_type == '3':
-                loan_type = 'Home loan'
-            else:
-                loan_type = 'Other'
+            loan_type = form.loan_type.data
 
             # print()
 
@@ -354,6 +348,7 @@ def apply_loan():
     elif request.method == 'GET':
         form.user_id.data = user.user_id
         form.user_name.data = user.user_name
+        form.loan_type.choices = [i.loan_name for i in LoanDetails.query.all()]
 
     return render_template(
         'applyloan.html',
@@ -379,25 +374,25 @@ def send_otp_fun(current_user):
 #     db.session.commit()
 
 
-# Request for loan route by user
-@users.route("/request-loan", methods=['GET', 'POST'])
-def request_loan():
-    if current_user.is_authenticated:
-        user = Loan.query.filter_by(user_id=current_user.user_id).first()
-        if user:
-            flash(PENDING_LOAN, FLASH_MESSAGES['FAIL'])
-            return redirect(url_for('users.dashboard'))
-        else:
-            user = User.query.filter_by(user_id=current_user.user_id).first()
-            loan = Loan(user_id=user.user_id)
-            db.session.add(loan)
-            db.session.commit()
-            loan_type()
-            flash(SUCCESS_ACTIVITY.format(activity='LOAN'), FLASH_MESSAGES['SUCCESS'])
-            return redirect(url_for('users.dashboard'))
-    else:
-        flash(LOGIN_FIRST, FLASH_MESSAGES['FAIL'])
-        return redirect('main.home')
+# # Request for loan route by user
+# @users.route("/request-loan", methods=['GET', 'POST'])
+# def request_loan():
+#     if current_user.is_authenticated:
+#         user = Loan.query.filter_by(user_id=current_user.user_id).first()
+#         if user:
+#             flash(PENDING_LOAN, FLASH_MESSAGES['FAIL'])
+#             return redirect(url_for('users.dashboard'))
+#         else:
+#             user = User.query.filter_by(user_id=current_user.user_id).first()
+#             loan = Loan(user_id=user.user_id)
+#             db.session.add(loan)
+#             db.session.commit()
+#             loan_type()
+#             flash(SUCCESS_ACTIVITY.format(activity='LOAN'), FLASH_MESSAGES['SUCCESS'])
+#             return redirect(url_for('users.dashboard'))
+#     else:
+#         flash(LOGIN_FIRST, FLASH_MESSAGES['FAIL'])
+#         return redirect('main.home')
 
 
 # # add loan type
@@ -407,27 +402,72 @@ def request_loan():
 #     db.session.add(loan_type)
 #     db.session.commit()
 
-
 # Request for insurance requested to admin panel with INACTIVE STATUS
 @users.route("/request-insurance", methods=['GET', 'POST'])
 @login_required
 def request_insurance():
-    if current_user.is_authenticated:
-        user = Insurance.query.filter_by(user_id=current_user.user_id).first()
-        if user:
-            flash(PENDING_ACTIVITY.format(activity='INSURANCE'), FLASH_MESSAGES['FAIL'])
+    form = ApplyInsuranceForm()
+    user = User.query.filter_by(user_id=current_user.user_id).first()
+    if form.validate_on_submit():
+        insurance = Insurance.query.filter_by(user_id=user.user_id).first()
+        if insurance:
+            flash(PENDING_ACTIVITY.format(activity='LOAN'), FLASH_MESSAGES['FAIL'])
             return redirect(url_for('users.dashboard'))
         else:
-            user = User.query.filter_by(user_id=current_user.user_id).first()
-            insurance = Insurance(user_id=user.user_id)
+            insurance_amount = form.insurance_amount_choices.data
+            if insurance_amount == '1':
+                insurance_amount = '1000'
+            elif insurance_amount == '2':
+                insurance_amount = '5000'
+            elif insurance_amount == '3':
+                insurance_amount = '10000'
+            else:
+                insurance_amount = '15000'
+
+            insurance_type_ = form.insurance_type.data
+
+            insurance = Insurance(user_id=user.user_id, insurance_amount=insurance_amount)
             db.session.add(insurance)
             db.session.commit()
-            insurance_type()
-            flash(SUCCESS_ACTIVITY.format(activity='INSURANCE'), FLASH_MESSAGES['SUCCESS'])
+            insurance_type_data = Insurance.query.filter_by(user_id=user.user_id).first()
+            insurance_type(insurance_type_)
+            flash(SUCCESS_ACTIVITY.format(activity='Insurance'), FLASH_MESSAGES['SUCCESS'])
             return redirect(url_for('users.dashboard'))
-    else:
-        flash(LOGIN_FIRST, FLASH_MESSAGES['FAIL'])
-        return redirect('main.home')
+
+    elif request.method == 'GET':
+        form.user_id.data = user.user_id
+        form.user_name.data = user.user_name
+        form.insurance_type.choices = [i.insurance_name for i in InsuranceDetails.query.all()]
+
+    return render_template(
+        'applyinsurance.html',
+        user_id=current_user.user_id,
+        user_name=current_user.user_name,
+        title='apply for insurance',
+        form=form
+    )
+
+
+# Request for insurance requested to admin panel with INACTIVE STATUS
+# @users.route("/request-insurance", methods=['GET', 'POST'])
+# @login_required
+# def request_insurance():
+#     if current_user.is_authenticated:
+#         user = Insurance.query.filter_by(user_id=current_user.user_id).first()
+#         if user:
+#             flash(PENDING_ACTIVITY.format(activity='INSURANCE'), FLASH_MESSAGES['FAIL'])
+#             return redirect(url_for('users.dashboard'))
+#         else:
+#             user = User.query.filter_by(user_id=current_user.user_id).first()
+#             insurance = Insurance(user_id=user.user_id)
+#             db.session.add(insurance)
+#             db.session.commit()
+#             insurance_type()
+#             flash(SUCCESS_ACTIVITY.format(activity='INSURANCE'), FLASH_MESSAGES['SUCCESS'])
+#             return redirect(url_for('users.dashboard'))
+#     else:
+#         flash(LOGIN_FIRST, FLASH_MESSAGES['FAIL'])
+#         return redirect('main.home')
 
 
 # # add type of insurance after applying for the insurance
@@ -486,15 +526,9 @@ def add_money():
                     db.session.add(transaction)
                     db.session.commit()
                     flash(TRANSACTION_SUCCESSFULLY, FLASH_MESSAGES['SUCCESS'])
-                    transaction = Transaction.query.filter_by(
-                        transaction_amount=transaction_amount,
-                        receiver_id=receiver_id,
-                        sender_id=sender_id,
-                        user_id=sender_id
-                    ).first()
                     transaction_id = transaction.transaction_id
                     transaction_type = 'credit'
-                    transaction_type(transaction_type, transaction_id)
+                    add_transaction_type(transaction_type, transaction_id)
                     return redirect(url_for('users.dashboard'))
                 else:
                     flash(CANT_TRANSFER, FLASH_MESSAGES['FAIL'])
@@ -535,15 +569,19 @@ def transfer_money():
         transfer_amount = form.transfer_amount.data
         otp_btn = form.otp_btn.data
         if transfer_choice == '1':
+            transaction_type = 'ac to saving'
             account.saving_balance += transfer_amount
             account.account_balance -= transfer_amount
         elif transfer_choice == '2':
+            transaction_type = 'saving to ac'
             account.saving_balance -= transfer_amount
             account.account_balance += transfer_amount
         elif transfer_choice == '3':
+            transaction_type = 'paid loan'
             account.account_balance -= transfer_amount
             loan.loan_amount -= transfer_amount
         elif transfer_choice == '4':
+            transaction_type = 'fd'
             account.account_balance -= transfer_amount
             fd.fd_amount += transfer_amount
         else:
@@ -559,8 +597,13 @@ def transfer_money():
             sender_id=user.user_id,
             receiver_id=user.user_id,
         )
+        # check = transfer.save()
         db.session.add(transfer)
         db.session.commit()
+
+        add_transaction_type(
+            transaction_id=transfer.transaction_id,
+            transaction_type=transaction_type)
 
         flash('transaction done', 'success')
         return redirect(url_for('users.dashboard'))

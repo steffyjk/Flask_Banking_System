@@ -6,7 +6,8 @@ from validate_email_address import validate_email
 from wtforms import ValidationError
 from banking_system import mail, db
 from banking_system.models import User, UserType, LoanType, Loan, Insurance, InsuranceType, TransactionType, \
-    FixedDeposit
+    FixedDeposit, Transaction
+
 
 def send_reset_email(user):
     token = user.get_reset_token()
@@ -72,20 +73,22 @@ def loan_type():
     db.session.commit()
 
 # add type of insurance after applying for the insurance
-def insurance_type():
+def insurance_type(insurance_type_):
     insurance = Insurance.query.filter_by(user_id=current_user.user_id).first()
-    insurance_type = InsuranceType(insurance_id=insurance.insurance_id)
+    insurance_type = InsuranceType(insurance_id=insurance.insurance_id,insurance_type=insurance_type_)
     db.session.add(insurance_type)
     db.session.commit()
 
-# add the transaction type after any transaction
-def add_transaction_type(transaction_type, transaction_id):
-    transaction_type = TransactionType(
-        transaction_type=transaction_type,
-        transaction_id=transaction_id
-    )
-    db.session.add(transaction_type)
-    db.session.commit()
+def add_transaction_type(transaction_type,transaction_id):
+    find_type = TransactionType.query.filter_by(transaction_id=transaction_id).first()
+
+    if find_type:
+        pass
+    else:
+        add_type = TransactionType(transaction_id=transaction_id,
+                                   transaction_type=transaction_type)
+        db.session.add(add_type)
+        db.session.commit()
 
 # add fd's interest to the user accounts
 def fd_interest(user):

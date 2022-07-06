@@ -30,9 +30,27 @@
                     <th>&nbsp;&nbsp;&nbsp;</th>
                     <th><button><a href="{{url_for('admin.bank_about_member')}}">Add bank member</a></button></pre></th>
 
-                    <th>&nbsp;&nbsp;&nbsp;</th>
-                    <th><button><a href="{{url_for('admin.member_role_list')}}">member_role_list</a></button></pre></th>
 
+
+                </table>
+                <table>
+                    <th><button><a href="{{url_for('admin.show_member_role_list')}}">Show all member role</a></button></pre></th>
+
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.show_loan_choices')}}">Show all loan detail</a></button></pre></th>
+                    <br>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.show_insurance_choices')}}">Show all insurance detail</a></button></pre></th>
+
+                </table>
+                <table>
+                    <th><button><a href="{{url_for('admin.member_role_list')}}">Add new member role</a></button></pre></th>
+
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.loan_choices')}}">add new loan detail</a></button></pre></th>
+                    <br>
+                    <th>&nbsp;&nbsp;&nbsp;</th>
+                    <th><button><a href="{{url_for('admin.insurance_choices')}}">add new insurance detail</a></button></pre></th>
 
                 </table>
                 <h5>REQUESTS</h5>

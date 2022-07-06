@@ -47,7 +47,7 @@ class LoginForm(FlaskForm):
 # update the suer profile
 class UpdateAccountForm(FlaskForm):
     user_name = StringField('Username: ', validators=[DataRequired(), Length(min=2, max=20)])
-    user_email = StringField('Email: ', validators=[DataRequired(), Email()],render_kw={'readonly': True})
+    user_email = StringField('Email: ', validators=[DataRequired(), Email()], render_kw={'readonly': True})
     user_phone_number = IntegerField('Phone number: ', validators=[DataRequired()])
     user_first_name = StringField('First name: ', validators=[DataRequired()])
     user_last_name = StringField('Last name: ', validators=[DataRequired()])
@@ -62,10 +62,9 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That username is taken please Choose different one')
 
-    def validate_user_phone_number(self,user_phone_number):
-        if len(str(user_phone_number.data))!=10:
+    def validate_user_phone_number(self, user_phone_number):
+        if len(str(user_phone_number.data)) != 10:
             raise ValidationError('Phone number must be 10 digits')
-
 
 
 # request for resetg the password
@@ -99,12 +98,24 @@ class ApplyLoanForm(FlaskForm):
                                      ]
                                      )
     loan_rate_interests = RadioField('Rate Interest', choices=[('1', '6.5%'), ('2', '6.7%')])
-    loan_type = RadioField('Loan type', choices=[
-        ('1', 'Personal loan'),
-        ('2', 'Education loan'),
-        ('3', 'Home loan'),
-        ('4', 'Other')])
+    loan_type = SelectField('Loan type', choices=[], validators=[DataRequired()], validate_choice=False)
     submit = SubmitField('Apply for loan')
+
+
+# applyforloan form
+class ApplyInsuranceForm(FlaskForm):
+    user_id = StringField('Your id: ', render_kw={'readonly': True})
+    user_name = StringField('Your name: ', render_kw={'readonly': True})
+    insurance_amount_choices = RadioField('Available Insurance amount',
+                                          choices=[
+                                              ('1', '1000'),
+                                              ('2', '5000'),
+                                              ('3', '10000'),
+                                              ('4', '15000')
+                                          ]
+                                          )
+    insurance_type = SelectField('Insurance type', choices=[], validators=[DataRequired()], validate_choice=False)
+    submit = SubmitField('Apply for Insurance')
 
 
 # add money to another account holder
@@ -161,6 +172,8 @@ class TransferMoney(FlaskForm):
                 raise ValidationError('you have not requested for fd yet')
 
         elif transfer_choice.data == '2':
+            print(transfer_amount.data)
+            print(account.saving_balance)
             if transfer_amount.data > account.saving_balance:
                 raise ValidationError('Insufficient saving balance')
 

@@ -99,6 +99,10 @@ class Transaction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
     transaction_type = relationship("TransactionType", cascade="all, delete")
 
+    def save(self):
+        db.session.add(self)
+        return db.session.commit()
+
 
 class TransactionType(db.Model):
     transaction_type_id = db.Column(db.Integer, primary_key=True)
@@ -182,12 +186,14 @@ class BankMember(db.Model):
 
 
 class MemberRole(db.Model):
-    id= db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     member_role = db.Column(db.String)
+
 
 class LoanDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     loan_name = db.Column(db.String)
+
 
 class InsuranceDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)

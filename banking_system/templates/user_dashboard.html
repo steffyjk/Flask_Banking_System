@@ -73,7 +73,7 @@
                 <div class="col-md-4" style="text-align:left">
                     <h5 style="text-align: left;">Insurance Detail</h5>
                     <h6>Insurance id: {{insurance.insurance_id}}</h6>
-                    <h6>Insurance amount: {{insurance.loan_amount}}</h6>
+                    <h6>Insurance amount: {{insurance.insurance_amount}}</h6>
                     <h6>Insurance status: {{insurance.insurance_status}}</h6>
                     <h6>user id: {{loan.user_id}}</h6>
                 </div>
@@ -184,9 +184,11 @@
                     text-align: left;
                     padding: 8px;">{{transaction.receiver_id}}</td>
                     {% for transaction_type in transaction_type %}
+                    {%if transaction_type.transaction_id==transaction.transaction_id %}
                     <td style="border: 1px solid #dddddd;
                     text-align: left;
                     padding: 8px;">{{transaction_type.transaction_type}}</td>
+                    {%endif%}
                     {% endfor %}
                 </tr>
 

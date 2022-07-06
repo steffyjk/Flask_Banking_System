@@ -2,30 +2,19 @@ import os
 import secrets
 from PIL import Image
 
-from flask import render_template, url_for, flash, redirect, request, current_app
+from flask import render_template, url_for, flash, redirect, request, current_app, jsonify
 from flask_login import login_user, login_required
 from banking_system import db, bcrypt
 from banking_system.admin.constants import ADMIN_LOGIN_SUCCESS, FLASH_MESSAGES, ADMIN_LOGIN_UNSUCCESS, USER_DELETED, \
     BRANCH_EXISTED, BRANCH_ADDED, ATM_EXISTED, ATM_ADDED, BANK_MEMBER_DELETED, BANK_MEMBER_ADDED, \
     STATUS_UPDATE
 from banking_system.models import Atm, User, Branch, BankDetails, Account, Loan, LoanType, Insurance, InsuranceType, \
-    FixedDeposit, Transaction, TransactionType, BankMember, MemberRole
+    FixedDeposit, Transaction, TransactionType, BankMember, MemberRole, LoanDetails, InsuranceDetails
 from banking_system.admin.forms import AddBranch, LoginForm, AddAtm, UserAccountStatus, LoanApprovalStatus, \
-    InsuranceApprovalForm, BankMemberData, UpdateFdStatus, AddMemberRole
+    InsuranceApprovalForm, BankMemberData, UpdateFdStatus, AddMemberRole, LoanChoice, InsuranceChoice
 from flask import Blueprint
 
 admin = Blueprint('admin', __name__)
-
-
-# # admin required decorator
-# def admin_login_required(f):
-#     @wraps(f)
-#     def wrap(*args, **kwargs):
-#         # user is available from @login_required
-#         if not g.user.is_admin:
-#             return "you need to be admin", 401
-#     return wrap(*args, **kwargs)
-# return wraps()
 
 # this is for the admin login only
 @admin.route("/admin_login", methods=['GET', 'POST'])
@@ -237,7 +226,7 @@ def update_fd_status(user_id):
         status = form.fd_status.data
         fd.fd_status = status
         db.session.commit()
-        flash(STATUS_UPDATE.format(user_name=user.user_name,activity='Fd'),FLASH_MESSAGES['SUCCESS'])
+        flash(STATUS_UPDATE.format(user_name=user.user_name, activity='Fd'), FLASH_MESSAGES['SUCCESS'])
         return redirect(url_for('admin.admin_user_fd_data'))
     elif request.method == 'GET':
         form.user_id.data = user.user_id
@@ -253,11 +242,12 @@ def update_fd_status(user_id):
 
 @admin.route("/delete-fd/<user_id>", methods=['GET', 'POST'])
 def delete_fd(user_id):
-    print("this is user_id from ajax: ",user_id)
+    print("this is user_id from ajax: ", user_id)
     user = User.query.filter_by(user_id=user_id).first()
-    print("this is name: ",user.user_name)
-    flash(f"{user.user_name} this is the name",'success')
+    print("this is name: ", user.user_name)
+    flash(f"{user.user_name} this is the name", 'success')
     return redirect(url_for('admin.admin_user_fd_data'))
+
 
 # approve/decline the fixed deposites requests from the bank users
 @admin.route(
@@ -406,6 +396,9 @@ def bank_about_member():
         db.session.commit()
         flash(BANK_MEMBER_ADDED, FLASH_MESSAGES['SUCCESS'])
         return redirect(url_for('admin.admin_dashboard'))
+    elif request.method == 'GET':
+        form.bank_member_position.choices = [i.member_role for i in MemberRole.query.all()]
+
     return render_template('add_bank_member.html', title='New bank member',
                            form=form, legend='New bank member')
 
@@ -435,23 +428,91 @@ def delete_bank_member(member_id, member_position):
     print(member)
     return redirect(url_for('admin.admin_dashboard'))
 
+# add new insurance detail for choices [ personal loan, education loan ] of the bank
+@admin.route("/show_member_role_list", methods=['GET', 'POST'])
+def show_member_role_list():
+    page = request.args.get('page', 1, type=int)
+    roles = MemberRole.query.paginate(page=page, per_page=3)
+    return render_template('show_all_member_role.html', roles=roles)
+
+
+# add new insurance detail for choices [ personal loan, education loan ] of the bank
+@admin.route("/show_loan_choices", methods=['GET', 'POST'])
+def show_loan_choices():
+    page = request.args.get('page', 1, type=int)
+    loans = LoanDetails.query.paginate(page=page, per_page=3)
+    return render_template('show_all_provided_loans.html', loans=loans)
+
+# add new insurance detail for choices [ personal loan, education loan ] of the bank
+@admin.route("/show_insurance_choices", methods=['GET', 'POST'])
+def show_insurance_choices():
+    page = request.args.get('page', 1, type=int)
+    insurances = InsuranceDetails.query.paginate(page=page, per_page=3)
+    return render_template('show_all_provided_insurances.html', insurances=insurances)
 
 # add new bank member role of the bank
 @admin.route("/add-bank-role", methods=['GET', 'POST'])
 def member_role_list():
     form = AddMemberRole()
     if form.validate_on_submit():
-        role_name=form.role_name.data
+        role_name = form.role_name.data
         role = MemberRole.query.filter_by(member_role=role_name).first()
         if role:
-            flash("this role is already exist",'danger')
+            flash("this role is already exist", 'danger')
             return redirect(url_for('admin.admin_dashboard'))
         else:
             add_role = MemberRole(member_role=role_name)
             db.session.add(add_role)
             db.session.commit()
-            flash("new role has been added",'success')
+            flash("new role has been added", 'success')
             return redirect(url_for('admin.admin_dashboard'))
 
-
     return render_template('add_member_role_list.html', title='add-member-role-list', form=form)
+
+# add new loan detail for choices [ personal loan, education loan ] of the bank
+@admin.route("/add-loan-options", methods=['GET', 'POST'])
+def loan_choices():
+    form = LoanChoice()
+    if form.validate_on_submit():
+        loan_choice = form.loan_choice.data
+        loan = LoanDetails.query.filter_by(loan_name=loan_choice).first()
+        if loan:
+            flash("this loan is already exist", 'danger')
+            return redirect(url_for('admin.admin_dashboard'))
+        else:
+            add_loan = LoanDetails(loan_name=loan_choice)
+            db.session.add(add_loan)
+            db.session.commit()
+            flash("new loan detail has been added", 'success')
+            return redirect(url_for('admin.admin_dashboard'))
+
+    return render_template('add_loan_choice_list.html', title='add-loan-choice-list', form=form)
+
+# add new insurance detail for choices [ personal loan, education loan ] of the bank
+@admin.route("/add-insurance-options", methods=['GET', 'POST'])
+def insurance_choices():
+    form = InsuranceChoice()
+    if form.validate_on_submit():
+        insurance_choice = form.insurance_choice.data
+        insurance = InsuranceDetails.query.filter_by(insurance_name=insurance_choice).first()
+        if insurance:
+            flash("this insurance is already exist", 'danger')
+            return redirect(url_for('admin.admin_dashboard'))
+        else:
+            add_insurance = InsuranceDetails(insurance_name=insurance_choice)
+            db.session.add(add_insurance)
+            db.session.commit()
+            flash("new insurance detail has been added", 'success')
+            return redirect(url_for('admin.admin_dashboard'))
+
+    return render_template('add_insurance_choice_list.html', title='add-loan-choice-list', form=form)
+
+
+@admin.route("/delete",methods=["POST","GET"])
+def delete():
+    for getid in request.form.getlist('checkdelete'):
+        print(getid)
+        MemberRole.query.filter_by(id=getid).delete()
+        db.session.commit()
+    return jsonify('Records deleted successfully')
+
