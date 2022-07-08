@@ -1,7 +1,7 @@
 SUCCESSFUL_REGISTRATION = 'Your account has been created you are all set for login'
 SUCCESSFUL_LOGIN = 'Login successfully'
 UNSUCCESSFUL_LOGIN = 'Login unsuccessfully..please check email and password'
-NEW_USER_ADDED = 'new user added successfully'
+NEW_USER_ADDED = 'New user added successfully'
 ADMIN_NOT_ACTIVATE_UR_ACCOUNT = 'Hey! admin does not activate your account yet! cant login rn'
 LOGOUT_SUCCESS = 'Logout successfully..'
 ACCOUNT_UPDATED = 'Your account has been update!'
@@ -13,7 +13,7 @@ ACCOUNT_CREATED = 'Your account has been created'
 LOGIN_FIRST = "You need to login first"
 ALREADY_CARD_EXISTED = 'You have already Card'
 CARD_CREATED = 'your card has been created'
-PENDING_LOAN = 'you have already current loan going on finish that  first'
+PENDING_LOAN = 'You have already current loan going on finish that  first'
 TRANSACTION_SUCCESSFULLY = "Transaction is successfully done"
 CANT_TRANSFER = 'You can not transfer to yourself it does\'t make any sense'
 PASSWORD_INCORRECT = 'Password is incorrect'

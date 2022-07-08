@@ -12,7 +12,6 @@ def load_user(user_id):
     return p
 
 
-# modified [ 09-06-2022 ]
 class User(db.Model, UserMixin):
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(320), unique=True, nullable=False)
@@ -198,3 +197,9 @@ class LoanDetails(db.Model):
 class InsuranceDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     insurance_name = db.Column(db.String)
+
+
+class OtpByMail(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(320), nullable=False)
+    otp = db.Column(db.Integer, nullable=False)

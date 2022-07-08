@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, RadioField, \
-    URLField, SelectField
+    SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from banking_system.models import Account, User, Loan, FixedDeposit
@@ -67,7 +67,7 @@ class UpdateAccountForm(FlaskForm):
             raise ValidationError('Phone number must be 10 digits')
 
 
-# request for resetg the password
+# request for reset the password
 class RequestResetForm(FlaskForm):
     user_email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
@@ -149,10 +149,6 @@ class TransferMoney(FlaskForm):
     enter_otp = StringField('enter your otp:')
     submit = SubmitField('Proceed the transfer')
 
-    def validate_otp_btn(self, otp_btn):
-        if not otp_btn.data:
-            raise ValidationError('PLease varify through the OTP first')
-
     def validate_transfer_amount(self, transfer_amount):
         transfer_choice = self.transfer_choice
         user = User.query.filter_by(user_id=current_user.user_id).first()
@@ -166,8 +162,11 @@ class TransferMoney(FlaskForm):
 
         elif transfer_choice.data == '4':
             if fd:
-                if transfer_amount.data > account.account_balance:
-                    raise ValidationError('Insufficient balance')
+                if fd.fd_status == 'Active':
+                    if transfer_amount.data > account.account_balance:
+                        raise ValidationError('Insufficient balance')
+                else:
+                    raise ValidationError('Fd status needs to activate first')
             else:
                 raise ValidationError('you have not requested for fd yet')
 
@@ -201,3 +200,15 @@ class ChangeBranch(FlaskForm):
     account_number = StringField('Account number', validators=[DataRequired()], render_kw={'readonly': True})
     myField = SelectField('Available branches', choices=[], validators=[DataRequired()], validate_choice=False)
     submit = SubmitField('Change the bank branch')
+
+
+# Otp moderation
+class OtpCheck(FlaskForm):
+    user_id = IntegerField('User id:  ', render_kw={'readonly': True})
+    transaction_amount = IntegerField('Transaction amount:  ',
+                                      render_kw={'readonly': True})
+    sender_id = IntegerField('Sender id:  ', render_kw={'readonly': True})
+    receiver_id = IntegerField('Receiver id:  ', render_kw={'readonly': True})
+    user_email = user_name = StringField('User Email ', render_kw={'readonly': True})
+    otp = IntegerField('Otp:  ')
+    submit = SubmitField('Proceed for transaction')
