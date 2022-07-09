@@ -29,6 +29,7 @@ def send_otp_email(user):
     msg = Message('Your OTP is here: ', sender='steffykhristi.18.ce@iite.indusuni.ac.in',
                   recipients=[user.user_email])
     msg.body = f'''This is the OTP as requested: :{otp}
+    Kindly check the next page and enter the otp.
     If you did not make this request then just ignore this msg and no change will be there.
     '''
     mail.send(msg)
