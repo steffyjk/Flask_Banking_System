@@ -72,7 +72,7 @@ def account_creation(user_id):
     db.session.add(account)
     db.session.commit()
 
-
+# for change the account selected default first branch
 @users.route("/change_branch", methods=['GET', 'POST'])
 @login_required
 def change_branch():
@@ -192,7 +192,7 @@ def profile():
 
     return render_template('user_profile.html', title='Account', form=form)
 
-
+# reset password request for the ser
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
@@ -386,7 +386,7 @@ def request_insurance():
     )
 
 
-# add_fixed_deposit
+# add fixed deposit
 @users.route("/add_fixed_deposit", methods=['GET', 'POST'])
 @login_required
 def add_fixed_deposit():
@@ -645,6 +645,6 @@ def bank_statement_pdf():
     )
     pdf = pdfkit.from_string(render, False)
     response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment;filename:bank_statement.pdf'
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "attachment;filename=bank_statement.pdf"
     return response

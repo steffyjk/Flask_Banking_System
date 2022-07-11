@@ -12,21 +12,18 @@
         <pre
             style="background-color: black; color:aliceblue">&nbsp;&nbsp;&nbsp;&nbsp;As a user you have this many options available :</pre>
         <hr>
-<!--        <button><a href="{{ url_for('users.request_account') }}">Request bank account</a></button>&nbsp;&nbsp;-->
-
         <button><a href="{{ url_for('users.change_branch') }}">Change the bank branch</a></button>&nbsp;&nbsp;
         <button><a href="{{ url_for('users.request_card') }}">Card request</a></button>&nbsp;&nbsp;
         <button><a href="{{ url_for('users.apply_loan') }}">Loan Request</a></button>&nbsp;&nbsp;
         <button><a href="{{ url_for('users.request_insurance') }}">Insurance Request</a></button>&nbsp;&nbsp;
         <button><a href="{{ url_for('users.add_fixed_deposit') }}">Add Fixed deposits</a></button>
-
         <hr>
-
         <button><a href="{{ url_for('users.add_money') }}">Transfer to other user</a></button>&nbsp;&nbsp;&nbsp;
         <button><a href="{{ url_for('users.transfer_money') }}">Transfer money in your account</a></button>
-<!--        {{current_user.user_name}}-->
         <button><a href="{{ url_for('users.fd_interest_money') }}">Apply to get Fd interest</a></button>
-        <button><a href="{{ url_for('users.bank_statement') }}">Bank statement</a></button>
+        <hr>
+        <button><a href="{{ url_for('users.bank_statement') }}">Bank statement</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button><a href="{{ url_for('users.bank_statement_pdf') }}">Download bank statement</a></button>
         <br>
         <hr>
         <pre style="background-color: black; color:aliceblue">&nbsp;&nbsp;&nbsp;&nbsp;This is all your detail :</pre>
@@ -50,13 +47,12 @@
 
                     <h5 style="text-align: left;">Card Detail</h5>
                     <h6>Account number: &nbsp;&nbsp;{{ card.account_number }}</h6>
-                    <h6>Crad number: &nbsp;&nbsp;{{ card.card_number }}</h6>
+                    <h6>Card number: &nbsp;&nbsp;{{ card.card_number }}</h6>
                     <h6>Cvv number: &nbsp;&nbsp;{{ card.cvv_number }}</h6>
-                    <h6>Crad PIN: &nbsp;&nbsp;{{ card.card_pin }}</h6>
+                    <h6>Card PIN: &nbsp;&nbsp;{{ card.card_pin }}</h6>
                     <h6>Creation date: &nbsp;&nbsp;{{ card.creation_date }}</h6>
                     <h6>Expiry date: &nbsp;&nbsp;{{ card.expiry_date }}</h6>
                 </div>
-
             </div>
             <br>
             <br>
@@ -70,7 +66,6 @@
                     <h6>Paid amount: {{loan.paid_amount}}</h6>
                     <h6>user id: {{loan.user_id}}</h6>
                 </div>
-
                 <div class="col-md-4" style="text-align:left">
                     <h5 style="text-align: left;">Insurance Detail</h5>
                     <h6>Insurance id: {{insurance.insurance_id}}</h6>
@@ -117,7 +112,8 @@
             <h4>
             <pre style="background-color: black; color:aliceblue; text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;Bank statements :</pre>
             </h4>
-            <h4>Name: {{current_user.user_name}}</h4> 
+            <h4>Name: {{current_user.user_name}}</h4>
+<!--            <h4>steffy</h4>-->
             <h4>Email: {{current_user.user_email}}</h4>
             
             <table style="font-family: arial, sans-serif;

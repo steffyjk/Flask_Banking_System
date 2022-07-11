@@ -1,5 +1,10 @@
-{% extends "base.html" %}
-{% block content %}
+<!doctype html>
+<html>
+    <head>
+    </head>
+
+    <body>
+
 <main role="main" class="container">
     <pre style="background-color: black; color:aliceblue; text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;Bank statements :</pre>
     </h4>
@@ -61,7 +66,10 @@
 
                 {% endfor %}
     <hr>
-        <button><a href="{{ url_for('users.bank_statement_pdf') }}">Download pdf</a></button>
 
 </main>
-{% endblock content %}
+
+    </body>
+</html>
+
+
